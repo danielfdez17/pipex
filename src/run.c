@@ -1,0 +1,41 @@
+#include "../inc/headers/pipex.h"
+
+void	run_command(char *cmd, char **envp)
+{
+	char	**split_cmd;
+	char	*executable;
+
+	split_cmd = ft_split(cmd, ' ');
+	if (!split_cmd)
+	{
+		ft_putendl_fd("Command could not be splitted", STDERR_FILENO);
+		error();
+	}
+	executable = get_exetuable(split_cmd[0]);
+
+	if (execve(executable, split_cmd, envp) < 0)
+	{
+		free(split_cmd);
+		free(executable);
+		error();
+	}
+	free(split_cmd);
+	free(executable);
+}
+
+
+void	run_i_child(t_pipex *pipex, int fd_read)
+{
+	ft_dup2(fd_read, STDIN_FILENO);
+	ft_dup2(pipex->fds[1], STDOUT_FILENO);
+	run_command(pipex->cmd1, pipex->envp);
+	close(pipex->fds[0]);
+}
+
+void	run_last_child(t_pipex *pipex, int fd_write)
+{
+	ft_dup2(pipex->fds[0], STDIN_FILENO);
+	ft_dup2(fd_write, STDOUT_FILENO);
+	run_command(pipex->cmd2, pipex->envp);
+	close(pipex->fds[1]);
+}

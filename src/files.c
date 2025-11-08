@@ -29,3 +29,9 @@ int	open_write_file(char *filename)
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	return (fd);
 }
+
+void	ft_dup2(int oldfd, int newfd)
+{
+	if (dup2(oldfd, newfd) < 0)
+		error();
+}

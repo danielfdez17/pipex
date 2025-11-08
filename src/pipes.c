@@ -64,32 +64,61 @@ void	execute(char *first, char *second, int *fds)
 	waitpid(pid2, NULL, 0);
 }
 
-void	pipex(int ac, char **av, int fd_read, int fd_write)
-{
-	int	i;
-	int	fds[2];
+// void	pipex(int ac, char **av, int fd_read, int fd_write)
+// {
+// 	int		i;
+// 	int		pid_ptr;
+// 	int		size;
+// 	int		fds[2];
+// 	pid_t	*pids;
 
-	(void)fd_read;
-	(void)fd_write;
-	if (!validate_commands(ac, av))
-	{
-		ft_printf("There is an invalid command\n");
-		return ;
-	}
-	return ;
-	// ! leer con GNL el fd_read y escribir en el pipe de escritura (fds[1])
-	if (pipe(fds) == -1)
-	{
-		perror("Pipe could not have been initialized\n");
-		return ;
-	}
-	i = 2;
-	while (i < ac - 2)
-	{
-		execute(av[i], av[i + 1], fds);
-		++i;
-	}
-	close_fds(fds);
-	close(fd_read);
-	close(fd_write);
-}
+// 	(void)fd_read;
+// 	(void)fd_write;
+// 	if (!validate_commands(ac, av))
+// 	{
+// 		ft_printf("There is an invalid command\n");
+// 		return ;
+// 	}
+// 	i = 2;
+// 	size = ac - i - 1;
+// 	pids = malloc(sizeof(pid_t) * size);
+// 	if (!pids)
+// 	{
+// 		ft_printf("Could not allocate memory for pids\n");
+// 		return ;
+// 	}
+// 	pid_ptr = 0;
+// 	ft_printf("size: %d\n", size);
+// 	while (pid_ptr < size)
+// 	{
+// 		pids[pid_ptr] = fork();
+// 		if (pids[pid_ptr] < 0)
+// 		{
+// 			free(pids);
+// 			return ;
+// 		}
+// 		if (pids[pid_ptr] == 0)
+// 		{
+// 			ft_printf("Hi my pid is %d\n", pids[pid_ptr]);
+// 		}
+// 		pid_ptr++;
+// 	}
+// 	return ;
+
+// 	// ! leer con GNL el fd_read y escribir en el pipe de escritura (fds[1])
+// 	if (pipe(fds) == -1)
+// 	{
+// 		perror("Pipe could not have been initialized\n");
+// 		return ;
+// 	}
+// 	i = 2;
+// 	while (i < ac - 2)
+// 	{
+// 		execute(av[i], av[i + 1], fds);
+// 		++i;
+// 	}
+// 	close_fds(fds);
+// 	close(fd_read);
+// 	close(fd_write);
+// }
+

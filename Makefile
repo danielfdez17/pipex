@@ -17,7 +17,7 @@ NAME = pipex
 # * Compilation
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
-# CFLAGS += -fsanitize=address
+CFLAGS += -fsanitize=address
 
 # * Removal
 RM = rm -f
@@ -83,11 +83,15 @@ re: fclean all
 
 # ! Automating / Debugging rules
 # INPUT = infile "ls -l" "grep Oct" "wc -l" outfile
-INPUT = infile "lsa -l" "wc -l" outfile
+INPUT = infile "ls -l" "wc -l" outfile
 
 run: all
 	clear
 	./$(NAME) $(INPUT)
+
+run2: all
+	clear
+	./$(NAME) infile "ls" "grep Make" outfile
 
 valgrind: all
 	clear
