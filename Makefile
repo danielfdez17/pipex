@@ -82,6 +82,7 @@ re: fclean all
 	@echo "Rebuilding $(NAME)"
 
 # ! Automating / Debugging rules
+# INPUT = infile "ls -l" "grep Oct" "wc -l" outfile
 INPUT = infile "ls -l" "wc -l" outfile
 
 run: all

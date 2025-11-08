@@ -24,6 +24,7 @@ int main(int ac, char **av)
 		ft_printf("File '%s' could not have been opened\n", av[ac - 1]);
 		return (1);
 	}
+	pipex(ac, av, fd_read, fd_write);
 	return (0);
 }
 
@@ -40,11 +41,10 @@ int main(int ac, char **av)
 // 	if (pid1 == 0)
 // 	{
 // 		char *av[] = {"ls", "-l", NULL};
-// 		char *env[] = {NULL};
 // 		// Child process one (ls -l)
 // 		dup2(fds[1], STDOUT_FILENO);
 // 		close_fds(fds);
-// 		if (execve("/usr/bin/ls", av, env) == -1)
+// 		if (execve("/usr/bin/ls", av, NULL) == -1)
 // 			perror("Could not execute execve");
 // 	}
 // 	int pid2 = fork();
@@ -53,11 +53,10 @@ int main(int ac, char **av)
 // 	if (pid2 == 0)
 // 	{
 // 		char *av[] = {"wc", "-l", NULL};
-// 		char *env[] = {NULL};
 // 		// Child process two (wc -l)
 // 		dup2(fds[0], STDIN_FILENO);
 // 		close_fds(fds);
-// 		if (execve("/usr/bin/wc", av, env) == -1)
+// 		if (execve("/usr/bin/wc", av, NULL) == -1)
 // 			perror("Could not execute execve");
 // 	}
 // 	close_fds(fds);

@@ -23,10 +23,14 @@ typedef short int t_bool;
 // * ERROR HANDLING
 
 // * PIPES HANDLING
+void	pipex(int ac, char **av, int fd_read, int fd_write);
 
 // * FILES HANDLING
 void	close_fds(int *fds);
 int		open_read_file(char *filename);
 int		open_write_file(char *filename);
+
+// * MEMORY HANDLING
+void	free_split(char **split);
 
 #endif // PIPEX_H
