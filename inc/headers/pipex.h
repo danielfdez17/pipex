@@ -5,7 +5,8 @@
 # include <stdio.h>
 # include <sys/types.h>
 # include <sys/wait.h>
-# include "string.h"
+# include <string.h>
+# include <fcntl.h>
 # include "../libft/inc/headers/libft.h"
 # include "../libft/inc/headers/ft_printf.h"
 
@@ -22,7 +23,10 @@ typedef short int t_bool;
 // * ERROR HANDLING
 
 // * PIPES HANDLING
-void	close_fds(int *fds);
 
+// * FILES HANDLING
+void	close_fds(int *fds);
+int		open_read_file(char *filename);
+int		open_write_file(char *filename);
 
 #endif // PIPEX_H

@@ -4,12 +4,26 @@
 
 int main(int ac, char **av)
 {
+	int	fd_read;
+	int	fd_write;
+
 	if (ac != 5)
 	{
 		ft_printf("The program needs exactly 4 arguments\n");
 		return (0);
 	}
-	ft_printf("%s\n", av[0]);
+	fd_read = open_read_file(av[1]);
+	if (fd_read == -1)
+	{
+		ft_printf("File '%s' could not have been opened\n", av[1]);
+		return (1);
+	}
+	fd_write = open_write_file(av[ac - 1]);
+	if (fd_write == -1)
+	{
+		ft_printf("File '%s' could not have been opened\n", av[ac - 1]);
+		return (1);
+	}
 	return (0);
 }
 

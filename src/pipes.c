@@ -1,5 +1,3 @@
-
-
 #include "../inc/headers/pipex.h"
 
 /**
