@@ -31,25 +31,33 @@ typedef struct s_pipex
 }	t_pipex;
 
 
-// * ERROR HANDLING
+// * ERROR HANDLERS
 void	error(void);
 
-// * PIPES HANDLING
+// * PIPES HANDLERS
 // void	pipex(int ac, char **av, int fd_read, int fd_write);
 
-// * FILES HANDLING
+// * FILES HANDLERS
 void	ft_dup2(int oldfd, int newfd);
 void	close_fds(int *fds);
 int		open_read_file(char *filename);
 int		open_write_file(char *filename);
 
-// * MEMORY HANDLING
+// * PATH HANDLERS
+char	*get_path(char *cmd, char *envp[]);
+int	cmd_have_path(char *cmd);
+int	cmd_have_current_path(char *cmd);
+
+// * MEMORY HANDLERS
 void	free_split(char **split);
 
-// * COMMANDS HANDLING
-void	run_command(char *cmd, char **envp);
-void	run_i_child(t_pipex *pipex, int fd_read);
-void	run_last_child(t_pipex *pipex, int fd_write);
+// * COMMANDS HANDLERS
+void	run_command(char *cmd, char *envp[]);
+// void	run_command(char *cmd, char **envp);
+void	run_i_child(t_pipex *data, int infile, char *envp[]);
+// void	run_i_child(t_pipex *pipex, int fd_read);
+void	run_last_child(t_pipex *data, int outfile, char *envp[]);
+// void	run_last_child(t_pipex *pipex, int fd_write);
 char	*get_exetuable(char *program_name);
 t_bool	validate_commands(int ac, char **av);
 
