@@ -83,7 +83,7 @@ re: fclean all
 
 # ! Automating / Debugging rules
 # INPUT = infile "ls -l" "grep Oct" "wc -l" outfile
-INPUT = infile "ls -l" "wc -l" outfile
+INPUT = infile "lsa -l" "wc -l" outfile
 
 run: all
 	clear

@@ -33,4 +33,8 @@ int		open_write_file(char *filename);
 // * MEMORY HANDLING
 void	free_split(char **split);
 
+// * COMMANDS HANDLING
+char	*get_exetuable(char *program_name);
+t_bool	validate_commands(int ac, char **av);
+
 #endif // PIPEX_H

@@ -71,6 +71,12 @@ void	pipex(int ac, char **av, int fd_read, int fd_write)
 
 	(void)fd_read;
 	(void)fd_write;
+	if (!validate_commands(ac, av))
+	{
+		ft_printf("There is an invalid command\n");
+		return ;
+	}
+	return ;
 	// ! leer con GNL el fd_read y escribir en el pipe de escritura (fds[1])
 	if (pipe(fds) == -1)
 	{
