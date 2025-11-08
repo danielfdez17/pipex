@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <sys/types.h>
-// #include <sys/wait.h>
+#include <sys/wait.h>
 
 // * Forks and pipe
 // int main(void)
@@ -63,8 +63,8 @@ int main(void)
 		if (execve("/usr/bin/wc", av, env) == -1)
 			perror("Could not execute execve");
 	}
+	close_fds(fds);
 	waitpid(pid1, NULL, 0);
 	waitpid(pid2, NULL, 0);
-	close_fds(fds);
 	return (0);
 }
