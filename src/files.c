@@ -6,7 +6,7 @@
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 08:06:34 by danfern3          #+#    #+#             */
-/*   Updated: 2025/11/10 12:25:07 by danfern3         ###   ########.fr       */
+/*   Updated: 2025/11/10 12:37:56 by danfern3         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	open_read_file(char *filename)
 int	open_write_file(char *filename)
 {
 	int	fd;
+
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	return (fd);
 }

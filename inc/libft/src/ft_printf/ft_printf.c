@@ -6,7 +6,7 @@
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 09:34:48 by danfern3          #+#    #+#             */
-/*   Updated: 2025/10/21 14:32:42 by danfern3         ###   ########.fr       */
+/*   Updated: 2025/11/10 12:34:30 by danfern3         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,15 @@ int	ft_cases(char const *av, va_list a_list)
 	return (-1);
 }
 
+static void	ft_empty_hole(int *tmp, char const **av)
+{
+	if (*tmp == -1)
+	{
+		(*av)--;
+		*tmp = 1;
+	}
+}
+
 int	ft_printf(char const *av, ...)
 {
 	va_list	a_list;
@@ -46,11 +55,7 @@ int	ft_printf(char const *av, ...)
 		{
 			av++;
 			tmp = ft_cases(av, a_list);
-			if (tmp == -1)
-			{
-				av--;
-				tmp = 1;
-			}
+			ft_empty_hole(&tmp, &av);
 			ret += tmp;
 		}
 		else

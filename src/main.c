@@ -6,7 +6,7 @@
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 08:07:54 by danfern3          #+#    #+#             */
-/*   Updated: 2025/11/10 12:29:16 by danfern3         ###   ########.fr       */
+/*   Updated: 2025/11/10 12:38:25 by danfern3         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ static void	init_fds(t_pipex *pipex, char **av, int i, int *fd_read_write)
  * Main function that initializes a t_pipex with @param av and @param envp
  * and starts the pipe simulation.
  */
-int main(int ac, char **av, char **envp)
+int	main(int ac, char **av, char **envp)
 {
 	t_pipex	*pipex;
 	int		fd_read_write[2];
@@ -115,7 +115,6 @@ int main(int ac, char **av, char **envp)
 			fd_read_write[0] = pipex->fd_read;
 		if (i == ac - 5)
 			fd_read_write[1] = pipex->fd_write;
-		// ft_printf("i: %d, first: %d, last: %d, cmds:%d\n", i, i == 0, i == cmds - 2, cmds);
 		fork_loop(&pipex, fd_read_write[0], fd_read_write[1]);
 		close_fds(pipex);
 		++i;
