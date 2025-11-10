@@ -6,7 +6,7 @@
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 08:07:54 by danfern3          #+#    #+#             */
-/*   Updated: 2025/11/10 09:58:59 by danfern3         ###   ########.fr       */
+/*   Updated: 2025/11/10 11:08:52 by danfern3         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,24 +50,16 @@ t_pipex	*check_files(char *infile, char *outfile)
 // }
 
 // ! fds[0] -> write, fds[1] -> read
-void	fork_loop(t_pipex **pipex, t_bool first, t_bool last)
+// * le puedo pasar el archivo de lectura y de escritura como parámetro, y me ahorro el firt y last
+void	fork_loop(t_pipex **pipex, int fd_read, int fd_write)
 {
-	(void)first; 
-	(void)last;
 	(*pipex)->pid1 = fork();
 	if ((*pipex)->pid1 < 0)
 		error();
 	if ((*pipex)->pid1 == 0)
 	{
-		if (first)
-			ft_dup2((*pipex)->fds[0], (*pipex)->fd_read);
-			//  ft_printf("reading from fd_read: %d\n", (*pipex)->fd_read);
-		else
-			ft_dup2((*pipex)->fds[0], STDIN_FILENO);
+		ft_dup2(fd_read, STDIN_FILENO);
 		ft_dup2((*pipex)->fds[1], STDOUT_FILENO);
-		// (*pipex)->cmd1 = ft_strjoin((*pipex)->cmd1, get_next_line())
-		// close((*pipex)->fd_read);
-		// // close((*pipex)->fd_write);
 		run_command((*pipex)->cmd1, (*pipex)->envp);
 		close_fds((*pipex)->fds);
 	}
@@ -77,13 +69,7 @@ void	fork_loop(t_pipex **pipex, t_bool first, t_bool last)
 	if ((*pipex)->pid2 == 0)
 	{
 		ft_dup2((*pipex)->fds[0], STDIN_FILENO);
-		if (last)
-			ft_printf("writing in fd_write: %d\n", (*pipex)->fd_write);
-			// ft_dup2((*pipex)->fds[1], (*pipex)->fd_write);
-		// else
-		// 	ft_dup2((*pipex)->fds[1], STDOUT_FILENO);
-		// // close((*pipex)->fd_read);
-		// close((*pipex)->fd_write);
+		ft_dup2(fd_write, STDOUT_FILENO);
 		close_fds((*pipex)->fds);
 		run_command((*pipex)->cmd2, (*pipex)->envp);
 	}
@@ -118,8 +104,8 @@ int main(int ac, char **av, char **envp)
 {
 	t_pipex	*pipex;
 	int		cmds;
-	t_bool	first;
-	t_bool	last;
+	int		fd_read;
+	int		fd_write;
 	int		i;
 
 	if (ac < 5)
@@ -134,10 +120,14 @@ int main(int ac, char **av, char **envp)
 		pipex->cmd2 = av[i + 3];
 		if (pipe(pipex->fds) == -1)
 			error();
-		first = (i == 0);
-		last = (cmds == ac - 4);
+		fd_read = pipex->fds[0];
+		fd_write = pipex->fds[1];
+		if (i == 0)
+			fd_read = pipex->fd_read;
+		if (cmds == ac - 4)
+			fd_write = pipex->fd_write;
 		// ft_printf("i: %d, first: %d, last: %d, cmds:%d\n", i, first, last, cmds);
-		fork_loop(&pipex, first, last);
+		fork_loop(&pipex, fd_read, fd_write);
 		// pipex->pid1 = fork();
 		// if (pipex->pid1 < 0)
 		// 	error();

@@ -6,7 +6,7 @@
 #    By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/10 09:34:42 by danfern3          #+#    #+#              #
-#    Updated: 2025/11/10 10:01:13 by danfern3         ###   ########.fr        #
+#    Updated: 2025/11/10 11:09:21 by danfern3         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -91,7 +91,7 @@ run: all
 
 run2: all
 	clear
-	./$(NAME) infile "ls" "grep Make" outfile
+	./$(NAME) infile "ls" "grep file" outfile
 
 valgrind: all
 	clear
