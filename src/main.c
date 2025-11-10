@@ -6,7 +6,7 @@
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 08:07:54 by danfern3          #+#    #+#             */
-/*   Updated: 2025/11/10 11:41:17 by danfern3         ###   ########.fr       */
+/*   Updated: 2025/11/10 11:47:11 by danfern3         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ int main(int ac, char **av, char **envp)
 	cmds = ac - 3;
 	i = 0;
 	pipex->envp = envp;
-	while (cmds-- != 1)
+	while (i < cmds - 1)
 	{
 		pipex->cmd1 = av[i + 2];
 		pipex->cmd2 = av[i + 3];
@@ -124,10 +124,10 @@ int main(int ac, char **av, char **envp)
 		fd_write = pipex->fds[1];
 		if (i == 0)
 			fd_read = pipex->fd_read;
-		if (cmds == ac - 4)
+		if (i == cmds - 2)
 			fd_write = pipex->fd_write;
-		ft_printf("i: %d, first: %d, last: %d, cmds:%d\n", i, i == 0, cmds == ac - 4, cmds);
-		// fork_loop(&pipex, fd_read, fd_write);
+		// ft_printf("i: %d, first: %d, last: %d, cmds:%d\n", i, i == 0, i == cmds - 2, cmds);
+		fork_loop(&pipex, fd_read, fd_write);
 		close_fds(pipex->fds);
 		++i;
 	}
