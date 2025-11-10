@@ -41,7 +41,7 @@ void	error(void);
 
 // * FILES HANDLERS
 void	ft_dup2(int oldfd, int newfd);
-void	close_fds(int *fds);
+void	close_fds(t_pipex *pipex);
 int		open_read_file(char *filename);
 int		open_write_file(char *filename);
 

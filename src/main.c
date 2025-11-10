@@ -6,7 +6,7 @@
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 08:07:54 by danfern3          #+#    #+#             */
-/*   Updated: 2025/11/10 11:47:11 by danfern3         ###   ########.fr       */
+/*   Updated: 2025/11/10 12:17:14 by danfern3         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	fork_loop(t_pipex **pipex, int fd_read, int fd_write)
 		ft_dup2(fd_read, STDIN_FILENO);
 		ft_dup2((*pipex)->fds[1], STDOUT_FILENO);
 		run_command((*pipex)->cmd1, (*pipex)->envp);
-		close_fds((*pipex)->fds);
+		close_fds(*pipex);
 	}
 	(*pipex)->pid2 = fork();
 	if ((*pipex)->pid2 < 0)
@@ -70,12 +70,12 @@ void	fork_loop(t_pipex **pipex, int fd_read, int fd_write)
 	{
 		ft_dup2((*pipex)->fds[0], STDIN_FILENO);
 		ft_dup2(fd_write, STDOUT_FILENO);
-		close_fds((*pipex)->fds);
+		close_fds(*pipex);
 		run_command((*pipex)->cmd2, (*pipex)->envp);
 	}
-	close_fds((*pipex)->fds);
-	close((*pipex)->fd_read);
-	close((*pipex)->fd_write);
+	close_fds(*pipex);
+	// close((*pipex)->fd_read);
+	// close((*pipex)->fd_write);
 	waitpid((*pipex)->pid1, NULL, 0);
 	waitpid((*pipex)->pid2, NULL, 0);
 }
@@ -92,9 +92,17 @@ void	write_file(t_pipex **pipex, int *fd_write, int *fd_read)
 		error();
 	if ((*pipex)->pid2 == 0)
 		run_last_child(*pipex, *fd_write);
-	close_fds((*pipex)->fds);
+	close_fds(*pipex);
 	close(*fd_write);
 	close(*fd_read);
+}
+
+void	init_fds(t_pipex *pipex, char **av, int i, int *fd_read_write)
+{
+	pipex->cmd1 = av[i + 2];
+	pipex->cmd2 = av[i + 3];
+	fd_read_write[0] = pipex->fds[0];
+	fd_read_write[1] = pipex->fds[1];
 }
 
 /**
@@ -103,37 +111,32 @@ void	write_file(t_pipex **pipex, int *fd_write, int *fd_read)
 int main(int ac, char **av, char **envp)
 {
 	t_pipex	*pipex;
-	int		cmds;
-	int		fd_read;
-	int		fd_write;
+	int		fd_read_write[2];
 	int		i;
 
-	if (ac < 5)
+	if (ac != 5)
 		error();
 	pipex = check_files(av[1], av[ac - 1]);
-	cmds = ac - 3;
 	i = 0;
 	pipex->envp = envp;
-	while (i < cmds - 1)
+	while (i < ac - 4)
 	{
-		pipex->cmd1 = av[i + 2];
-		pipex->cmd2 = av[i + 3];
 		if (pipe(pipex->fds) == -1)
 			error();
-		fd_read = pipex->fds[0];
-		fd_write = pipex->fds[1];
+		// pipex->cmd1 = av[i + 2];
+		// pipex->cmd2 = av[i + 3];
+		// fd_read = pipex->fds[0];
+		// fd_write = pipex->fds[1];
+		init_fds(pipex, av, i, fd_read_write);
 		if (i == 0)
-			fd_read = pipex->fd_read;
-		if (i == cmds - 2)
-			fd_write = pipex->fd_write;
+			fd_read_write[0] = pipex->fd_read;
+		if (i == ac - 5)
+			fd_read_write[1] = pipex->fd_write;
 		// ft_printf("i: %d, first: %d, last: %d, cmds:%d\n", i, i == 0, i == cmds - 2, cmds);
-		fork_loop(&pipex, fd_read, fd_write);
-		close_fds(pipex->fds);
+		fork_loop(&pipex, fd_read_write[0], fd_read_write[1]);
+		close_fds(pipex);
 		++i;
 	}
-	close(pipex->fd_read);
-	close(pipex->fd_write);
-	close_fds(pipex->fds);
 	free(pipex);
 	return (0);
 }

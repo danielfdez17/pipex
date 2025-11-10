@@ -6,7 +6,7 @@
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 08:06:34 by danfern3          #+#    #+#             */
-/*   Updated: 2025/11/10 08:07:38 by danfern3         ###   ########.fr       */
+/*   Updated: 2025/11/10 11:50:14 by danfern3         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,12 @@
 /**
  * It closes both sides of the pipe
  */
-void	close_fds(int *fds)
+void	close_fds(t_pipex *pipex)
 {
-	close(fds[0]);
-	close(fds[1]);
+	close(pipex->fds[0]);
+	close(pipex->fds[1]);
+	close(pipex->fd_read);
+	close(pipex->fd_write);
 }
 
 /**
