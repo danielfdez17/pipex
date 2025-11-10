@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   validation.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/10 08:08:16 by danfern3          #+#    #+#             */
+/*   Updated: 2025/11/10 08:09:31 by danfern3         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/headers/pipex.h"
 
 t_bool	validate_commands(int ac, char **av)
@@ -13,8 +25,8 @@ t_bool	validate_commands(int ac, char **av)
 		cmd = ft_split(av[i], ' ');
 		if (!cmd)
 		{
-			ft_printf("Could not split argv in %s\n", __func__);
-			return (FALSE);
+			ft_putendl_fd("Could not split av when validating commands", STDERR_FILENO);
+			error();
 		}
 		executable = get_exetuable(cmd[0]);
 		access_res = access(executable, F_OK);
