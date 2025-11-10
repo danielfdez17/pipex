@@ -6,13 +6,13 @@
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 08:08:16 by danfern3          #+#    #+#             */
-/*   Updated: 2025/11/10 08:09:31 by danfern3         ###   ########.fr       */
+/*   Updated: 2025/11/10 12:28:59 by danfern3         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/headers/pipex.h"
 
-t_bool	validate_commands(int ac, char **av)
+t_bool	validate_commands(t_pipex *pipex, int ac, char **av)
 {
 	int		i;
 	char	*executable;
@@ -26,7 +26,7 @@ t_bool	validate_commands(int ac, char **av)
 		if (!cmd)
 		{
 			ft_putendl_fd("Could not split av when validating commands", STDERR_FILENO);
-			error();
+			error(pipex);
 		}
 		executable = get_exetuable(cmd[0]);
 		access_res = access(executable, F_OK);

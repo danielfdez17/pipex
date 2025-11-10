@@ -6,7 +6,7 @@
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 08:06:34 by danfern3          #+#    #+#             */
-/*   Updated: 2025/11/10 11:50:14 by danfern3         ###   ########.fr       */
+/*   Updated: 2025/11/10 12:25:07 by danfern3         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ int	open_write_file(char *filename)
 /**
  * Calls error if dup2 fails
  */
-void	ft_dup2(int oldfd, int newfd)
+void	ft_dup2(t_pipex *pipex, int oldfd, int newfd)
 {
 	if (dup2(oldfd, newfd) < 0)
-		error();
+		error(pipex);
 }

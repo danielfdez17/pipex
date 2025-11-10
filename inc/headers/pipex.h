@@ -34,13 +34,13 @@ typedef struct s_pipex
 
 
 // * ERROR HANDLERS
-void	error(void);
+void	error(t_pipex *pipex);
 
 // * PIPES HANDLERS
 // void	pipex(int ac, char **av, int fd_read, int fd_write);
 
 // * FILES HANDLERS
-void	ft_dup2(int oldfd, int newfd);
+void	ft_dup2(t_pipex *pipex, int oldfd, int newfd);
 void	close_fds(t_pipex *pipex);
 int		open_read_file(char *filename);
 int		open_write_file(char *filename);
@@ -50,10 +50,10 @@ int		open_write_file(char *filename);
 void	free_split(char **split);
 
 // * COMMANDS HANDLERS
-void	run_command(char *cmd, char **envp);
+void	run_command(t_pipex *pipex, char *cmd, char **envp);
 void	run_i_child(t_pipex *pipex, int fd_read);
 void	run_last_child(t_pipex *pipex, int fd_write);
 char	*get_exetuable(char *program_name);
-t_bool	validate_commands(int ac, char **av);
+t_bool	validate_commands(t_pipex *pipex, int ac, char **av);
 
 #endif // PIPEX_H
