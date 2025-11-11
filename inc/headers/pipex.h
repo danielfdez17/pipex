@@ -23,27 +23,6 @@
 # include "../libft/inc/headers/libft.h"
 # include "../libft/inc/headers/ft_printf.h"
 
-# ifndef FALSE
-#  define FALSE 0
-# endif
-# ifndef TRUE
-#  define TRUE 1
-# endif
-
-typedef short int	t_bool;
-
-typedef struct s_pipex
-{
-	int		fds[2];
-	pid_t	pid1;
-	pid_t	pid2;
-	char	*cmd1;
-	char	*cmd2;
-	char	**envp;
-	int		fd_read;
-	int		fd_write;
-}	t_pipex;
-
 // * ERROR HANDLERS
 void	error(void);
 void	cmd_not_found(char **argv, char *path);
@@ -62,8 +41,5 @@ char	*get_path(char *cmd, char **envp);
 void	run_command(char *cmd, char **envp);
 void	run_first_cmd(char **av, int *fds, char **envp);
 void	run_last_cmd(char **av, int *fds, char **envp);
-
-// * BONUS
-void	run_i_cmd(char **av, int *fds, char **envp, int cmd);
 
 #endif // PIPEX_H

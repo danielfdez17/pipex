@@ -23,13 +23,6 @@
 # include "../libft/inc/headers/libft.h"
 # include "../libft/inc/headers/ft_printf.h"
 
-# ifndef FALSE
-#  define FALSE 0
-# endif
-# ifndef TRUE
-#  define TRUE 1
-# endif
-
 // * ERROR HANDLERS
 void	error_bonus(void);
 void	cmd_not_found_bonus(char **argv, char *path);
