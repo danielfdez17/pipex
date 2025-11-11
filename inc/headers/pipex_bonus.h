@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#ifndef PIPEX_BONUS_H
+# define PIPEX_BONUS_H
 
 # include <unistd.h>
 # include <stdio.h>
@@ -30,40 +30,22 @@
 #  define TRUE 1
 # endif
 
-typedef short int	t_bool;
-
-typedef struct s_pipex
-{
-	int		fds[2];
-	pid_t	pid1;
-	pid_t	pid2;
-	char	*cmd1;
-	char	*cmd2;
-	char	**envp;
-	int		fd_read;
-	int		fd_write;
-}	t_pipex;
-
 // * ERROR HANDLERS
-void	error(void);
-void	cmd_not_found(char **argv, char *path);
+void	error_bonus(void);
+void	cmd_not_found_bonus(char **argv, char *path);
 
 // * FILES HANDLERS
-void	close_fds(int *fds);
-int		open_read_file(char *filename);
-int		open_write_file(char *filename);
-void	ft_dup2(int oldfd, int newfd);
+void	close_fds_bonus(int *fds);
+int		open_read_file_bonus(char *filename);
+int		open_write_file_bonus(char *filename);
+void	ft_dup2_bonus(int oldfd, int newfd);
 
 // * MEMORY HANDLERS
-void	free_split(char **split);
+void	free_split_bonus(char **split);
 
 // * COMMANDS HANDLERS
-char	*get_path(char *cmd, char **envp);
-void	run_command(char *cmd, char **envp);
-void	run_first_cmd(char **av, int *fds, char **envp);
-void	run_last_cmd(char **av, int *fds, char **envp);
+char	*get_path_bonus(char *cmd, char **envp);
+void	run_command_bonus(char *cmd, char **envp);
+void	run_i_cmd_bonus(char **av, int *fds, char **envp, int cmd);
 
-// * BONUS
-void	run_i_cmd(char **av, int *fds, char **envp, int cmd);
-
-#endif // PIPEX_H
+#endif // PIPEX_BONUS_H

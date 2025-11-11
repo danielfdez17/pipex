@@ -41,3 +41,48 @@ valgrind ./pipex "lorem_ipsum.txt" "/dev/cmdrandom" "head -1" outfile
 // OK
 clear && <infile ls -l | wc -l > outfile_cmd
 valgrind ./pipex infile "ls -l" "wc -l" outfile
+
+//////////////////////////////////////// BONUS ////////////////////////////////////////
+// OK
+clear && <lorem_ipsum.txt cat | grep Aliqua | hostname > outfile_cmd
+valgrind ./pipex "lorem_ipsum.txt" "cat" "grep Aliqua" "hostname" outfile
+
+// OK
+clear && <lorem_ipsum.txt cat | wc -w | grep Ullamco > outfile_cmd
+valgrind ./pipex "lorem_ipsum.txt" "cat" "wc -w" "grep Ullamco" outfile
+
+// OK
+clear && <lorem_ipsum.txt grep Ullamco | head -2 > outfile_cmd
+valgrind ./pipex "lorem_ipsum.txt" "grep Ullamco" "head -2" outfile
+
+// OK
+clear && <lorem_ipsum.txt grep Ullamco | wc -w > outfile_cmd
+valgrind ./pipex "lorem_ipsum.txt" "grep Ullamco" "wc -w" outfile
+
+// OK
+clear && <lorem_ipsum.txt grep Ullamco | cat > outfile_cmd
+valgrind ./pipex "lorem_ipsum.txt" "grep Ullamco" "cat" outfile
+
+// OK
+clear && <lorem_ipsum.txt wc -w | head -2 > outfile_cmd
+valgrind ./pipex "lorem_ipsum.txt" "wc -w" "head -2" outfile
+
+// OK
+clear && <lorem_ipsum.txt notexisting | wc -w > outfile_cmd
+valgrind ./pipex "lorem_ipsum.txt" "notexisting" "wc -w" outfile
+
+// OK
+clear && <lorem_ipsum.txt cat | notexisting > outfile_cmd
+valgrind ./pipex "lorem_ipsum.txt" "cat" "notexisting" outfile
+
+// OK
+clear && <lorem_ipsum.txt grep Aliqua | /usr/bin/cat > outfile_cmd
+valgrind ./pipex "lorem_ipsum.txt" "grep Aliqua" "/usr/bin/cat" outfile
+
+// OK
+clear && <lorem_ipsum.txt /dev/cmdrandom | head -1 > outfile_cmd
+valgrind ./pipex "lorem_ipsum.txt" "/dev/cmdrandom" "head -1" outfile
+
+// OK
+clear && <infile ls -l | wc -l > outfile_cmd
+valgrind ./pipex infile "ls -l" "wc -l" outfile

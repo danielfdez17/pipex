@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,34 +10,31 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/headers/pipex.h"
+#include "../inc/headers/pipex_bonus.h"
 
 /**
  * Main function that creates two child processes
  * to execute the commands received in @param av
  */
-// int	main(int ac, char **av, char **envp)
-// {
-// 	int		fds[2];
-// 	pid_t	pid1;
-// 	pid_t	pid2;
+int	main(int ac, char **av, char **envp)
+{
+	int	fd_read;
+	int	fd_write;
+	int	i;
+	int	fds[2];
 
-// 	if (ac != 5)
-// 		error();
-// 	if (pipe(fds) == -1)
-// 		error();
-// 	pid1 = fork();
-// 	if (pid1 < 0)
-// 		error();
-// 	if (pid1 == 0)
-// 		run_first_cmd(av, fds, envp);
-// 	pid2 = fork();
-// 	if (pid2 < 0)
-// 		error();
-// 	if (pid2 == 0)
-// 		run_last_cmd(av, fds, envp);
-// 	close_fds(fds);
-// 	waitpid(pid1, NULL, 0);
-// 	waitpid(pid2, NULL, 0);
-// 	return (0);
-// }
+	if (ac < 5)
+		return (0);
+	fd_read = open_read_file_bonus(av[1]);
+	fd_write = open_write_file_bonus(av[ac - 1]);
+	i = 2;
+	if (pipe(fds) < 0)
+		error_bonus();
+	ft_dup2_bonus(fd_read, STDIN_FILENO);
+	while (i < ac - 2)
+		run_i_cmd_bonus(av, fds, envp, i++);
+	ft_dup2_bonus(fd_write, STDOUT_FILENO);
+	run_command_bonus(av[ac - 2], envp);
+	close_fds_bonus(fds);
+	return (0);
+}
