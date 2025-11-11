@@ -83,7 +83,7 @@ void	run_first_cmd(char **av, int *fds, char **envp)
 {
 	int	fd;
 
-	fd = open(av[1], O_RDONLY, 0777);
+	fd = open(av[1], O_RDONLY, 0644);
 	if (fd < 0)
 	{
 		close_fds(fds);
