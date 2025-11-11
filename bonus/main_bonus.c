@@ -28,10 +28,6 @@ int	main(int ac, char **av, char **envp)
 	fd_read = open_read_file_bonus(av[1]);
 	fd_write = open_write_file_bonus(av[ac - 1]);
 	i = 2;
-	// if (pipe(fds) < 0)
-	// 	error_bonus();
-	// ft_calloc(sizeof(char *), 10);
-	// return (0);
 	ft_dup2_bonus(fd_read, STDIN_FILENO);
 	while (i < ac - 2)
 		run_i_cmd_bonus(av, fds, envp, i++);

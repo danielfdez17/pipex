@@ -30,7 +30,7 @@ int	open_read_file(char *filename)
 {
 	int	fd;
 
-	fd = open(filename, O_RDONLY, 0777);
+	fd = open(filename, O_RDONLY, 0644);
 	return (fd);
 }
 

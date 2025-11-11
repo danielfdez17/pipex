@@ -30,7 +30,7 @@ int	open_read_file_bonus(char *filename)
 {
 	int	fd;
 
-	fd = open(filename, O_RDONLY, 0777);
+	fd = open(filename, O_RDONLY, 0644);
 	if (fd < 0)
 		error_bonus();
 	return (fd);
