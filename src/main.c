@@ -13,149 +13,69 @@
 #include "../inc/headers/pipex.h"
 
 /**
- * Checks if the @param infile file exists.
- * If @param outfile file does not exist, 
- * it is created.
+ * Runs the first command reading the content of the infile file
  */
-t_pipex	*check_files(char *infile, char *outfile)
+void	run_first_cmd(char **av, int *fds, char **envp)
 {
-	t_pipex	*pipex;
+	int	fd;
 
-	pipex = malloc(sizeof(t_pipex));
-	if (!pipex)
-		error(pipex);
-	pipex->fd_read = open_read_file(infile);
-	if (pipex->fd_read == -1)
-		error(pipex);
-	pipex->fd_write = open_write_file(outfile);
-	if (pipex->fd_write == -1)
-		error(pipex);
-	return (pipex);
-}
-
-/**
- * Loop to process every two command
- */
-void	fork_loop(t_pipex **pipex, int fd_read, int fd_write)
-{
-	(*pipex)->pid1 = fork();
-	if ((*pipex)->pid1 < 0)
-		error(*pipex);
-	if ((*pipex)->pid1 == 0)
+	fd = open(av[1], O_RDONLY, 0777);
+	if (fd < 0)
 	{
-		ft_dup2(*pipex, fd_read, STDIN_FILENO);
-		ft_dup2(*pipex, (*pipex)->fds[1], STDOUT_FILENO);
-		run_command(*pipex, (*pipex)->cmd1, (*pipex)->envp);
-		close_fds(*pipex);
+		close_fds(fds);
+		return ;
 	}
-	(*pipex)->pid2 = fork();
-	if ((*pipex)->pid2 < 0)
-		error(*pipex);
-	if ((*pipex)->pid2 == 0)
-	{
-		ft_dup2(*pipex, (*pipex)->fds[0], STDIN_FILENO);
-		ft_dup2(*pipex, fd_write, STDOUT_FILENO);
-		close_fds(*pipex);
-		run_command(*pipex, (*pipex)->cmd2, (*pipex)->envp);
-	}
-	close_fds(*pipex);
-	waitpid((*pipex)->pid1, NULL, 0);
-	waitpid((*pipex)->pid2, NULL, 0);
+	// close(fds[0]);
+	ft_dup2(fd, STDIN_FILENO);
+	ft_dup2(fds[1], STDOUT_FILENO);
+	close_fds(fds);
+	run_command(av[2], envp);
 }
 
 /**
- * Last process execution
+ * Runs the last command reading the output of the first cmd
+ * and writing its output in the outfile file
  */
-void	write_file(t_pipex **pipex, int *fd_write, int *fd_read)
+void	run_last_cmd(char **av, int *fds, char **envp)
 {
-	if (pipe((*pipex)->fds) == -1)
-		error(*pipex);
-	(*pipex)->pid2 = fork();
-	if ((*pipex)->pid2 < 0)
-		error(*pipex);
-	if ((*pipex)->pid2 == 0)
-		run_last_child(*pipex, *fd_write);
-	close_fds(*pipex);
-	close(*fd_write);
-	close(*fd_read);
+	int	fd;
+
+	fd = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if (fd < 0)
+		error();
+	// close(fds[1]);
+	ft_dup2(fds[0], STDIN_FILENO);
+	ft_dup2(fd, STDOUT_FILENO);
+	close_fds(fds);
+	run_command(av[3], envp);
 }
 
 /**
- * Auxiliary function to reduce number of lines of function main
- */
-static void	init_fds(t_pipex *pipex, char **av, int i, int *fd_read_write)
-{
-	pipex->cmd1 = av[i + 2];
-	pipex->cmd2 = av[i + 3];
-	fd_read_write[0] = pipex->fds[0];
-	fd_read_write[1] = pipex->fds[1];
-}
-
-/**
- * Main function that initializes a t_pipex with @param av and @param envp
- * and starts the pipe simulation.
+ * Main function that creates two child processes
+ * to execute the commands received in @param av
  */
 int	main(int ac, char **av, char **envp)
 {
-	t_pipex	*pipex;
-	int		fd_read_write[2];
-	int		i;
+	int		fds[2];
+	pid_t	pid1;
+	pid_t	pid2;
 
 	if (ac != 5)
-		error(NULL);
-	pipex = check_files(av[1], av[ac - 1]);
-	i = 0;
-	pipex->envp = envp;
-	while (i < ac - 4)
-	{
-		if (pipe(pipex->fds) == -1)
-			error(pipex);
-		init_fds(pipex, av, i, fd_read_write);
-		if (i == 0)
-			fd_read_write[0] = pipex->fd_read;
-		if (i == ac - 5)
-			fd_read_write[1] = pipex->fd_write;
-		fork_loop(&pipex, fd_read_write[0], fd_read_write[1]);
-		close_fds(pipex);
-		++i;
-	}
-	free(pipex);
+		error();
+	if (pipe(fds) == -1)
+		error();
+	pid1 = fork();
+	if (pid1 < 0)
+		error();
+	if (pid1 == 0)
+		run_first_cmd(av, fds, envp);
+	pid2 = fork();
+	if (pid2 < 0)
+		error();
+	if (pid2 == 0)
+		run_last_cmd(av, fds, envp);
+	close_fds(fds);
+	waitpid(pid1, NULL, 0);
+	waitpid(pid2, NULL, 0);
 	return (0);
 }
-
-// * Pipe (|) simulation
-// int main(void)
-// {
-// 	int fds[2];
-
-// 	if (pipe(fds) == -1)
-// 		return (1);
-// 	int pid1 = fork();
-// 	if (pid1 < 0)	
-// 		return (2);
-// 	if (pid1 == 0)
-// 	{
-// 		char *av[] = {"ls", "-l", NULL};
-// 		// Child process one (ls -l)
-// 		dup2(fds[1], STDOUT_FILENO);
-// 		close_fds(fds);
-// 		if (execve("/usr/bin/ls", av, NULL) == -1)
-// 			perror("Could not execute execve");
-// 	}
-// 	int pid2 = fork();
-// 	if (pid2 < 0)
-// 		return (4);
-// 	if (pid2 == 0)
-// 	{
-// 		char *av[] = {"wc", "-l", NULL};
-// 		// Child process two (wc -l)
-// 		dup2(fds[0], STDIN_FILENO);
-// 		close_fds(fds);
-// 		if (execve("/usr/bin/wc", av, NULL) == -1)
-// 			perror("Could not execute execve");
-// 	}
-// 	close_fds(fds);
-// 	waitpid(pid1, NULL, 0);
-// 	waitpid(pid2, NULL, 0);
-// 	return (0);
-// }

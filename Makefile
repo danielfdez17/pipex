@@ -91,7 +91,7 @@ run: all
 
 run2: all
 	clear
-	./$(NAME) infile "ls" "grep file" outfile
+	./$(NAME) infile "grep Makefile" "wc -w" outfile
 
 valgrind: all
 	clear

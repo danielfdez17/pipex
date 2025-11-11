@@ -13,14 +13,14 @@
 #include "../inc/headers/pipex.h"
 
 /**
- * It closes both sides of the pipe
+ * Closes both sides of the pipe
+ * ! fds[0] = read end
+ * ! fds[1] = write end
  */
-void	close_fds(t_pipex *pipex)
+void	close_fds(int *fds)
 {
-	close(pipex->fds[0]);
-	close(pipex->fds[1]);
-	close(pipex->fd_read);
-	close(pipex->fd_write);
+	close(fds[0]);
+	close(fds[1]);
 }
 
 /**
@@ -48,8 +48,8 @@ int	open_write_file(char *filename)
 /**
  * Calls error if dup2 fails
  */
-void	ft_dup2(t_pipex *pipex, int oldfd, int newfd)
+void	ft_dup2(int oldfd, int newfd)
 {
 	if (dup2(oldfd, newfd) < 0)
-		error(pipex);
+		error();
 }

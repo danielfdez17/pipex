@@ -15,11 +15,24 @@
 /**
  * Prints the error and terminates the program execution
  */
-void	error(t_pipex *pipex)
+void	error(void)
 {
-	if (pipex)
-		free(pipex);
-	pipex = NULL;
 	ft_putendl_fd(strerror(errno), STDERR_FILENO);
-	exit(EXIT_FAILURE);
+	exit(errno);
+}
+
+/**
+ * Frees the memory used by @param argv and @param path,
+ * prints an error msg and terminates the program
+ */
+void	cmd_not_found(char **argv, char *path)
+{
+	ft_putstr_fd(argv[0], STDERR_FILENO);
+	ft_putendl_fd(": command not found", STDERR_FILENO);
+	if (path)
+		free(path);
+	path = NULL;
+	if (argv)
+		free_split(argv);
+	exit(errno);
 }
