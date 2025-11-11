@@ -47,22 +47,20 @@ typedef struct s_pipex
 // * ERROR HANDLERS
 void	error(void);
 void	cmd_not_found(char **argv, char *path);
-// void	error(t_pipex *pipex);
 
 // * FILES HANDLERS
-void	ft_dup2(int oldfd, int newfd);
 void	close_fds(int *fds);
-// void	close_fds(t_pipex *pipex);
 int		open_read_file(char *filename);
 int		open_write_file(char *filename);
+void	ft_dup2(int oldfd, int newfd);
 
 // * MEMORY HANDLERS
 void	free_split(char **split);
 
 // * COMMANDS HANDLERS
+char	*get_path(char *cmd, char **envp);
 void	run_command(char *cmd, char **envp);
-// void	run_command(t_pipex *pipex, char *cmd, char **envp);
-char	*get_exetuable(char *program_name);
-t_bool	validate_commands(t_pipex *pipex, int ac, char **av);
+void	run_first_cmd(char **av, int *fds, char **envp);
+void	run_last_cmd(char **av, int *fds, char **envp);
 
 #endif // PIPEX_H

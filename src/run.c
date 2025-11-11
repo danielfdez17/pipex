@@ -12,8 +12,10 @@
 
 #include "../inc/headers/pipex.h"
 
-
-char	*get_path(char *cmd, char *envp[])
+/**
+ * @returns the path stored in @param envp
+ */
+char	*get_path(char *cmd, char **envp)
 {
 	char	**split_path;
 	char	*path;
@@ -42,6 +44,9 @@ char	*get_path(char *cmd, char *envp[])
 	return (NULL);
 }
 
+/**
+ * Runs the @param cmd command
+ */
 void	run_command(char *cmd, char **envp)
 {
 	char	**argv;
@@ -49,12 +54,7 @@ void	run_command(char *cmd, char **envp)
 
 	argv = ft_split(cmd, ' ');
 	if (ft_strchr(argv[0], '.'))
-	{
-		free_split(argv);
-		ft_putstr_fd(argv[0], STDERR_FILENO);
-		ft_putendl_fd(": command not found", STDERR_FILENO);
-		exit(errno);
-	}
+		cmd_not_found(argv, NULL);
 	if (ft_strchr(argv[0], '/'))
 	{
 		path = ft_strdup(argv[0]);
@@ -67,16 +67,47 @@ void	run_command(char *cmd, char **envp)
 	}
 	path = get_path(argv[0], envp);
 	if (!path)
-	{
-		ft_putstr_fd(argv[0], STDERR_FILENO);
-		ft_putendl_fd(": command not found", STDERR_FILENO);
-		free(path);
-		free_split(argv);
-		exit(errno);
-	}
+		cmd_not_found(argv, path);
 	if (execve(path, argv, envp) < 0)
 	{
 		free_split(argv);
 		error();
 	}
+	free(path);
+}
+
+/**
+ * Runs the first command reading the content of the infile file
+ */
+void	run_first_cmd(char **av, int *fds, char **envp)
+{
+	int	fd;
+
+	fd = open(av[1], O_RDONLY, 0777);
+	if (fd < 0)
+	{
+		close_fds(fds);
+		return ;
+	}
+	ft_dup2(fd, STDIN_FILENO);
+	ft_dup2(fds[1], STDOUT_FILENO);
+	close_fds(fds);
+	run_command(av[2], envp);
+}
+
+/**
+ * Runs the last command reading the output of the first cmd
+ * and writing its output in the outfile file
+ */
+void	run_last_cmd(char **av, int *fds, char **envp)
+{
+	int	fd;
+
+	fd = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if (fd < 0)
+		error();
+	ft_dup2(fds[0], STDIN_FILENO);
+	ft_dup2(fd, STDOUT_FILENO);
+	close_fds(fds);
+	run_command(av[3], envp);
 }

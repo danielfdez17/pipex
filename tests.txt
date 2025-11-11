@@ -31,8 +31,8 @@ clear && <lorem_ipsum.txt cat | notexisting > outfile_cmd
 valgrind ./pipex "lorem_ipsum.txt" "cat" "notexisting" outfile
 
 // OK
-clear && <lorem_ipsum.txt grep Ullamco | /usr/bin/cat > outfile_cmd
-valgrind ./pipex "lorem_ipsum.txt" "grep Ullamco" "/usr/bin/cat" outfile
+clear && <lorem_ipsum.txt grep Aliqua | /usr/bin/cat > outfile_cmd
+valgrind ./pipex "lorem_ipsum.txt" "grep Aliqua" "/usr/bin/cat" outfile
 
 // OK
 clear && <lorem_ipsum.txt /dev/cmdrandom | head -1 > outfile_cmd
