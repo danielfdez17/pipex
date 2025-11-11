@@ -83,6 +83,8 @@ void	run_i_cmd_bonus(char **av, int *fds, char **envp, int cmd)
 {
 	pid_t	pid;
 
+	if (pipe(fds) < 0)
+		error_bonus();
 	pid = fork();
 	if (pid < 0)
 		error_bonus();
