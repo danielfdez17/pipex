@@ -17,7 +17,7 @@ NAME = pipex
 # * Compilation
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
-# CFLAGS += -fsanitize=address
+CFLAGS += -fsanitize=address
 
 # * Removal
 RM = rm -f
@@ -84,10 +84,10 @@ $(LIBFT):
 # ? Compiles the whole program/library
 all: obj $(NAME)
 
-bonus: bonus_obj $(BONUS_OBJS) $(LIBFT)
-	@clear
-	@$(CC) $(CFLAGS) $(INCLUDES) $(BONUS_OBJS) $(LIBFT) -o $(NAME)
-	@echo "Compiling bonus $(NAME)"
+# bonus: bonus_obj $(BONUS_OBJS) $(LIBFT)
+# 	@clear
+# 	@$(CC) $(CFLAGS) $(INCLUDES) $(BONUS_OBJS) $(LIBFT) -o $(NAME)
+# 	@echo "Compiling bonus $(NAME)"
 
 obj:
 	@mkdir -p $(OBJ_DIR)
@@ -113,10 +113,10 @@ re: fclean all
 	@$(MAKE) -C $(LIBFT_DIR) re
 	@echo "Rebuilding $(NAME)"
 
-rebonus: fclean bonus
-	@echo "Rebuilding $(LIBFT)"
-	@$(MAKE) -C $(LIBFT_DIR) re
-	@echo "Rebuilding $(NAME)"
+# rebonus: fclean bonus
+# 	@echo "Rebuilding $(LIBFT)"
+# 	@$(MAKE) -C $(LIBFT_DIR) re
+# 	@echo "Rebuilding $(NAME)"
 
 # ! Automating / Debugging rules
 # INPUT = infile "ls -l" "grep Oct" "wc -l" outfile
