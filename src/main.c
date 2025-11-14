@@ -20,7 +20,7 @@ int	main(int ac, char **av, char **envp)
 {
 	int		fds[2];
 	pid_t	pid1;
-	// pid_t	pid2;
+	pid_t	pid2;
 	int		status;
 
 	if (ac != 5)
@@ -32,15 +32,19 @@ int	main(int ac, char **av, char **envp)
 		error();
 	if (pid1 == 0)
 		run_first_cmd(av, fds, envp);
-	// pid2 = fork();
-	// if (pid2 < 0)
-	// 	error();
-	// if (pid2 == 0)
-	run_last_cmd(av, fds, envp);
+	pid2 = fork();
+	if (pid2 < 0)
+		error();
+	if (pid2 == 0)
+		run_last_cmd(av, fds, envp);
 	close_fds(fds);
 	waitpid(pid1, &status, 0);
+	waitpid(pid2, &status, 0);
 	if (WIFEXITED(status))
+	{
+		// ft_printf("First command exited with status: %d\n", WEXITSTATUS(status));
 		exit(WEXITSTATUS(status));
+	}
 	// waitpid(pid2, NULL, 0);
 	return (0);
 }

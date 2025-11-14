@@ -17,8 +17,8 @@
  */
 void	error(void)
 {
-	// ft_putendl_fd(strerror(errno), STDERR_FILENO);
 	perror(NULL);
+	// ft_putendl_fd(strerror(errno), STDERR_FILENO);
 	exit(EXIT_FAILURE);
 }
 
@@ -37,4 +37,5 @@ void	cmd_not_found(char **argv, char *path)
 	if (argv)
 		free_split(argv);
 	exit(errno);
+	// error();
 }

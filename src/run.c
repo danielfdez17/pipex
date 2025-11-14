@@ -32,9 +32,15 @@ char	*get_path(char *cmd, char **envp)
 		tmp = ft_strjoin(split_path[i], "/");
 		path = ft_strjoin(tmp, cmd);
 		free(tmp);
-		if (access(path, F_OK) == 0)
+		if (access(path, F_OK) == 0 && access(path, X_OK) == 0)
 		{
 			free_split(split_path);
+			// if (access(path, X_OK) != 0)
+			// {
+			// 	free(path);
+			// 	error();
+			// 	// return (NULL);
+			// }
 			return (path);
 		}
 		free(path);
