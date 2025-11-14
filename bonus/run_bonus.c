@@ -77,14 +77,64 @@ void	run_command_bonus(char *cmd, char **envp)
 }
 
 /**
+ * Runs the first command reading the content of the infile file
+ */
+int	run_first_cmd(char **av, int *fds, char **envp)
+{
+	int	fd;
+
+	if (access(av[1], F_OK) != 0)
+	{
+		close_fds_bonus(fds);
+		error_bonus();
+	}
+	if (access(av[1], R_OK) != 0)
+	{
+		close_fds_bonus(fds);
+		error_bonus();
+	}
+	fd = open(av[1], O_RDONLY, 0644);
+	if (fd < 0)
+	{
+		close_fds_bonus(fds);
+		error_bonus();
+	}
+	ft_dup2_bonus(fd, STDIN_FILENO);
+	ft_dup2_bonus(fds[1], STDOUT_FILENO);
+	close(fds[0]);
+	run_command_bonus(av[2], envp);
+	return (fd);
+}
+
+/**
+ * Runs the last command reading the output of the first cmd
+ * and writing its output in the outfile file
+ */
+int	run_last_cmd(int ac, char **av, int *fds, char **envp)
+{
+	int	fd;
+
+	if (errno != 0)
+		return (errno);
+	fd = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if (fd < 0)
+		error_bonus();
+	ft_dup2_bonus(fds[0], STDIN_FILENO);
+	ft_dup2_bonus(fd, STDOUT_FILENO);
+	close_fds_bonus(fds);
+	run_command_bonus(av[ac - 2], envp);
+	return (0);
+}
+
+/**
  * Runs the @param cmd command reading
  */
 void	run_i_cmd_bonus(char **av, int *fds, char **envp, int cmd)
 {
 	pid_t	pid;
 
-	if (pipe(fds) < 0)
-		error_bonus();
+	// if (pipe(fds) < 0)
+	// 	error_bonus();
 	pid = fork();
 	if (pid < 0)
 		error_bonus();

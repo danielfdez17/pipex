@@ -45,6 +45,8 @@ void	free_split_bonus(char **split);
 
 // * COMMANDS HANDLERS
 char	*get_path_bonus(char *cmd, char **envp);
+int		run_first_cmd(char **av, int *fds, char **envp);
+int		run_last_cmd(int ac, char **av, int *fds, char **envp);
 void	run_command_bonus(char *cmd, char **envp);
 void	run_i_cmd_bonus(char **av, int *fds, char **envp, int cmd);
 

@@ -6,7 +6,7 @@
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 08:08:09 by danfern3          #+#    #+#             */
-/*   Updated: 2025/11/10 12:36:14 by danfern3         ###   ########.fr       */
+/*   Updated: 2025/11/14 15:55:17 by danfern3         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,15 @@ char	*get_path(char *cmd, char **envp)
 		tmp = ft_strjoin(split_path[i], "/");
 		path = ft_strjoin(tmp, cmd);
 		free(tmp);
-		if (access(path, F_OK) == 0)
+		if (access(path, F_OK) == 0 && access(path, X_OK) == 0)
 		{
 			free_split(split_path);
+			// if (access(path, X_OK) != 0)
+			// {
+			// 	free(path);
+			// 	error();
+			// 	// return (NULL);
+			// }
 			return (path);
 		}
 		free(path);
@@ -79,30 +85,46 @@ void	run_command(char *cmd, char **envp)
 /**
  * Runs the first command reading the content of the infile file
  */
-void	run_first_cmd(char **av, int *fds, char **envp)
+int	run_first_cmd(char **av, int *fds, char **envp)
 {
 	int	fd;
 
-	fd = open(av[1], O_RDONLY, 0777);
+	if (access(av[1], F_OK) != 0)
+	{
+		close_fds(fds);
+		error();
+		return (errno);
+	}
+	if (access(av[1], R_OK) != 0)
+	{
+		close_fds(fds);
+		error();
+		return (errno);
+	}
+	fd = open(av[1], O_RDONLY, 0644);
 	if (fd < 0)
 	{
 		close_fds(fds);
-		return ;
+		error();
+		return (errno);
 	}
 	ft_dup2(fd, STDIN_FILENO);
 	ft_dup2(fds[1], STDOUT_FILENO);
 	close_fds(fds);
 	run_command(av[2], envp);
+	return (0);
 }
 
 /**
  * Runs the last command reading the output of the first cmd
  * and writing its output in the outfile file
  */
-void	run_last_cmd(char **av, int *fds, char **envp)
+int	run_last_cmd(char **av, int *fds, char **envp)
 {
 	int	fd;
 
+	if (errno != 0)
+		return (errno);
 	fd = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (fd < 0)
 		error();
@@ -110,4 +132,5 @@ void	run_last_cmd(char **av, int *fds, char **envp)
 	ft_dup2(fd, STDOUT_FILENO);
 	close_fds(fds);
 	run_command(av[3], envp);
+	return (0);
 }

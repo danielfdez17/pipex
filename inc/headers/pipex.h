@@ -6,7 +6,7 @@
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:32:07 by danfern3          #+#    #+#             */
-/*   Updated: 2025/11/10 12:38:38 by danfern3         ###   ########.fr       */
+/*   Updated: 2025/11/14 15:27:49 by danfern3         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,27 +22,6 @@
 # include <errno.h>
 # include "../libft/inc/headers/libft.h"
 # include "../libft/inc/headers/ft_printf.h"
-
-# ifndef FALSE
-#  define FALSE 0
-# endif
-# ifndef TRUE
-#  define TRUE 1
-# endif
-
-typedef short int	t_bool;
-
-typedef struct s_pipex
-{
-	int		fds[2];
-	pid_t	pid1;
-	pid_t	pid2;
-	char	*cmd1;
-	char	*cmd2;
-	char	**envp;
-	int		fd_read;
-	int		fd_write;
-}	t_pipex;
 
 // * ERROR HANDLERS
 void	error(void);
@@ -60,10 +39,7 @@ void	free_split(char **split);
 // * COMMANDS HANDLERS
 char	*get_path(char *cmd, char **envp);
 void	run_command(char *cmd, char **envp);
-void	run_first_cmd(char **av, int *fds, char **envp);
-void	run_last_cmd(char **av, int *fds, char **envp);
-
-// * BONUS
-void	run_i_cmd(char **av, int *fds, char **envp, int cmd);
+int		run_first_cmd(char **av, int *fds, char **envp);
+int		run_last_cmd(char **av, int *fds, char **envp);
 
 #endif // PIPEX_H
