@@ -6,7 +6,7 @@
 #    By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/10 09:34:42 by danfern3          #+#    #+#              #
-#    Updated: 2025/11/10 11:09:21 by danfern3         ###   ########.fr        #
+#    Updated: 2025/11/14 07:49:50 by danfern3         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ NAME = pipex
 # * Compilation
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
-CFLAGS += -fsanitize=address
+# CFLAGS += -fsanitize=address
 
 # * Removal
 RM = rm -f
