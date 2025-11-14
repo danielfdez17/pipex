@@ -6,7 +6,7 @@
 #    By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/10 09:34:42 by danfern3          #+#    #+#              #
-#    Updated: 2025/11/14 07:49:50 by danfern3         ###   ########.fr        #
+#    Updated: 2025/11/14 07:54:40 by danfern3         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -112,27 +112,27 @@ rebonus: fclean bonus
 
 # ! Automating / Debugging rules
 # INPUT = infile "ls -l" "grep Oct" "wc -l" outfile
-INPUT = infile "ls -l" "wc -l" outfile
+# INPUT = infile "ls -l" "wc -l" outfile
 
-run: all
-	clear
-	./$(NAME) $(INPUT)
+# run: all
+# 	clear
+# 	./$(NAME) $(INPUT)
 
-run2: all
-	clear
-	./$(NAME) infile "grep Makefile" "wc -w" outfile
+# run2: all
+# 	clear
+# 	./$(NAME) infile "grep Makefile" "wc -w" outfile
 
-valgrind: all
-	clear
-	valgrind ./$(NAME) $(INPUT)
+# valgrind: all
+# 	clear
+# 	valgrind ./$(NAME) $(INPUT)
 
-debug: all
-	clear
-	gdb ./$(NAME)
+# debug: all
+# 	clear
+# 	gdb ./$(NAME)
 
-debug_bonus: bonus
-	clear
-	gdb ./$(NAME)
+# debug_bonus: bonus
+# 	clear
+# 	gdb ./$(NAME)
 
 # Protects all rules from files with same name
 .PHONY: all obj clean fclean re run valgrind debug
