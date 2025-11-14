@@ -6,7 +6,7 @@
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:32:07 by danfern3          #+#    #+#             */
-/*   Updated: 2025/11/10 12:38:38 by danfern3         ###   ########.fr       */
+/*   Updated: 2025/11/14 15:27:49 by danfern3         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	free_split(char **split);
 // * COMMANDS HANDLERS
 char	*get_path(char *cmd, char **envp);
 void	run_command(char *cmd, char **envp);
-void	run_first_cmd(char **av, int *fds, char **envp);
-void	run_last_cmd(char **av, int *fds, char **envp);
+int		run_first_cmd(char **av, int *fds, char **envp);
+int		run_last_cmd(char **av, int *fds, char **envp);
 
 #endif // PIPEX_H

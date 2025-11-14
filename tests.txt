@@ -42,6 +42,16 @@ valgrind ./pipex "lorem_ipsum.txt" "/dev/cmdrandom" "head -1" outfile
 clear && <infile ls -l | wc -l > outfile_cmd
 valgrind ./pipex infile "ls -l" "wc -l" outfile
 
+// OK
+clear && < nonexistingfile cat -e | ls > outfiles/outfile // 0
+valgrind ./pipex "nonexistingfile" "cat -e" "ls" "outfiles/outfile" // 0
+
+// KO
+< nonexistingfile cat "sleep 3" > outfiles/outfile // 1
+valgrind ./pipex nonexistingfile cat "sleep 3" outfiles/outfile // 0
+
+
+
 //////////////////////////////////////// BONUS ////////////////////////////////////////
 // OK - LEAK (en teoría)
 clear && <lorem_ipsum.txt cat | grep Aliqua | hostname > outfile_cmd

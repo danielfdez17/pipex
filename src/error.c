@@ -6,7 +6,7 @@
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 08:06:31 by danfern3          #+#    #+#             */
-/*   Updated: 2025/11/14 07:54:11 by danfern3         ###   ########.fr       */
+/*   Updated: 2025/11/14 15:32:45 by danfern3         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,9 @@
  */
 void	error(void)
 {
-	ft_putendl_fd(strerror(errno), STDERR_FILENO);
-	exit(errno);
+	// ft_putendl_fd(strerror(errno), STDERR_FILENO);
+	perror(NULL);
+	exit(EXIT_FAILURE);
 }
 
 /**
@@ -27,8 +28,9 @@ void	error(void)
  */
 void	cmd_not_found(char **argv, char *path)
 {
-	ft_putstr_fd(argv[0], STDERR_FILENO);
-	ft_putendl_fd(": command not found", STDERR_FILENO);
+	perror(NULL);
+	// ft_putstr_fd(" ", STDERR_FILENO);
+	// ft_putstr_fd(argv[0], STDERR_FILENO);
 	if (path)
 		free(path);
 	path = NULL;

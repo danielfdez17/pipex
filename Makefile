@@ -6,7 +6,7 @@
 #    By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/10 09:34:42 by danfern3          #+#    #+#              #
-#    Updated: 2025/11/14 07:54:40 by danfern3         ###   ########.fr        #
+#    Updated: 2025/11/14 15:18:18 by danfern3         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,12 +33,20 @@ BONUS_OBJ_DIR = ./bonus/obj/
 
 # * Sources files
 PIPEX_DIR = ./src/
-PIPEX_SRCS = $(shell ls $(PIPEX_DIR) | grep -E ".+\.c")
+PIPEX_SRCS =	error.c \
+				files.c \
+				free.c \
+				main.c \
+				run.c
 SRCS = $(PIPEX_SRCS)
 
 # * Bonus sources files
 BONUS_PIPEX_DIR = ./bonus/
-BONUS_PIPEX_SRCS = $(shell ls $(BONUS_PIPEX_DIR) | grep -E ".+\.c")
+BONUS_PIPEX_SRCS =	error_bonus.c \
+					files_bonus.c \
+					free_bonus.c \
+					main_bonus.c \
+					run_bonus.c
 BONUS_SRCS = $(BONUS_PIPEX_SRCS)
 
 # * Creating object files
@@ -126,9 +134,9 @@ rebonus: fclean bonus
 # 	clear
 # 	valgrind ./$(NAME) $(INPUT)
 
-# debug: all
-# 	clear
-# 	gdb ./$(NAME)
+debug: all
+	clear
+	gdb ./$(NAME)
 
 # debug_bonus: bonus
 # 	clear
