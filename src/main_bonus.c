@@ -137,16 +137,10 @@ int main(int ac, char **av, char **envp)
                 ft_dup2(outfile, STDOUT_FILENO);
 
             // Cerrar restos en child
-            if (pipe_prev[0] != -1)
-                close(pipe_prev[0]);
-            if (pipe_prev[1] != -1)
-                close(pipe_prev[1]);
+			close_fds(pipe_prev);
 
             if (i != ac - 2)
-            {
-                close(pipe_curr[0]);
-                close(pipe_curr[1]);
-            }
+				close_fds(pipe_curr);
 			close_files(infile, outfile);
 
             run_command(av[i], envp);
@@ -156,10 +150,7 @@ int main(int ac, char **av, char **envp)
         /* ----- PARENT ----- */
 
         // cerrar pipe anterior
-        if (pipe_prev[0] != -1)
-            close(pipe_prev[0]);
-        if (pipe_prev[1] != -1)
-            close(pipe_prev[1]);
+		close_fds(pipe_prev);
 
         // mover pipe_curr a pipe_prev
         if (i != ac - 2)
@@ -172,9 +163,7 @@ int main(int ac, char **av, char **envp)
     }
 
     // cerrar pipes finales
-    if (pipe_prev[0] != -1) close(pipe_prev[0]);
-    if (pipe_prev[1] != -1) close(pipe_prev[1]);
-
+	close_fds(pipe_prev);
 	close_files(infile, outfile);
 
     // esperar a todos los hijos
