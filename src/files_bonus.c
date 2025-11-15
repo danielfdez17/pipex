@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   files.c                                            :+:      :+:    :+:   */
+/*   files.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/headers/pipex.h"
+#include "../inc/headers/pipex_bonus.h"
 
 /**
  * Closes both sides of the pipe
@@ -19,8 +19,10 @@
  */
 void	close_fds(int *fds)
 {
-	close(fds[0]);
-	close(fds[1]);
+	if (fds[0] != -1)
+		close(fds[0]);
+	if (fds[1] != -1)
+		close(fds[1]);
 }
 
 /**

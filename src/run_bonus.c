@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   run_bonus.c                                        :+:      :+:    :+:   */
+/*   run.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -15,7 +15,7 @@
 /**
  * @returns the path stored in @param envp
  */
-char	*get_path_bonus(char *cmd, char **envp)
+char	*get_path(char *cmd, char **envp)
 {
 	char	**split_path;
 	char	*path;
@@ -32,46 +32,46 @@ char	*get_path_bonus(char *cmd, char **envp)
 		tmp = ft_strjoin(split_path[i], "/");
 		path = ft_strjoin(tmp, cmd);
 		free(tmp);
-		if (access(path, F_OK) == 0)
+		if (access(path, F_OK) == 0 && access(path, X_OK) == 0)
 		{
-			free_split_bonus(split_path);
+			free_split(split_path);
 			return (path);
 		}
 		free(path);
 		i++;
 	}
-	free_split_bonus(split_path);
+	free_split(split_path);
 	return (NULL);
 }
 
 /**
  * Runs the @param cmd command
  */
-void	run_command_bonus(char *cmd, char **envp)
+void	run_command(char *cmd, char **envp)
 {
 	char	**argv;
 	char	*path;
 
 	argv = ft_split(cmd, ' ');
 	if (ft_strchr(argv[0], '.'))
-		cmd_not_found_bonus(argv, NULL);
+		cmd_not_found(argv, NULL);
 	if (ft_strchr(argv[0], '/'))
 	{
 		path = ft_strdup(argv[0]);
 		if (execve(path, argv, envp) < 0)
 		{
-			free_split_bonus(argv);
+			free_split(argv);
 			free(path);
-			error_bonus();
+			error();
 		}
 	}
-	path = get_path_bonus(argv[0], envp);
+	path = get_path(argv[0], envp);
 	if (!path)
-		cmd_not_found_bonus(argv, path);
+		cmd_not_found(argv, path);
 	if (execve(path, argv, envp) < 0)
 	{
-		free_split_bonus(argv);
-		error_bonus();
+		free_split(argv);
+		error();
 	}
 	free(path);
 }
@@ -85,24 +85,25 @@ int	run_first_cmd(char **av, int *fds, char **envp)
 
 	if (access(av[1], F_OK) != 0)
 	{
-		close_fds_bonus(fds);
-		error_bonus();
+		close_fds(fds);
+		error();
 	}
 	if (access(av[1], R_OK) != 0)
 	{
-		close_fds_bonus(fds);
-		error_bonus();
+		close_fds(fds);
+		error();
 	}
 	fd = open(av[1], O_RDONLY, 0644);
 	if (fd < 0)
 	{
-		close_fds_bonus(fds);
-		error_bonus();
+		close_fds(fds);
+		error();
 	}
-	ft_dup2_bonus(fd, STDIN_FILENO);
-	ft_dup2_bonus(fds[1], STDOUT_FILENO);
-	close(fds[0]);
-	run_command_bonus(av[2], envp);
+	ft_dup2(fd, STDIN_FILENO);
+	ft_dup2(fds[1], STDOUT_FILENO);
+	close_fds(fds);
+	// close(fds[0]);
+	run_command(av[2], envp);
 	return (fd);
 }
 
@@ -118,36 +119,38 @@ int	run_last_cmd(int ac, char **av, int *fds, char **envp)
 		return (errno);
 	fd = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (fd < 0)
-		error_bonus();
-	ft_dup2_bonus(fds[0], STDIN_FILENO);
-	ft_dup2_bonus(fd, STDOUT_FILENO);
-	close_fds_bonus(fds);
-	run_command_bonus(av[ac - 2], envp);
+		error();
+	ft_dup2(fds[0], STDIN_FILENO);
+	ft_dup2(fd, STDOUT_FILENO);
+	close_fds(fds);
+	run_command(av[ac - 2], envp);
 	return (0);
 }
 
 /**
  * Runs the @param cmd command reading
  */
-void	run_i_cmd_bonus(char **av, int *fds, char **envp, int cmd)
+void	run_i_cmd(char **av, char **envp, int cmd)
 {
+	int		fds[2];
 	pid_t	pid;
 
-	// if (pipe(fds) < 0)
-	// 	error_bonus();
+	if (pipe(fds) < 0)
+		error();
 	pid = fork();
 	if (pid < 0)
-		error_bonus();
+		error();
 	if (pid == 0)
 	{
-		ft_dup2_bonus(fds[1], STDOUT_FILENO);
+		ft_dup2(fds[1], STDOUT_FILENO);
 		close(fds[0]);
-		run_command_bonus(av[cmd], envp);
+		run_command(av[cmd], envp);
 	}
 	else
 	{
-		ft_dup2_bonus(fds[0], STDIN_FILENO);
+		ft_dup2(fds[0], STDIN_FILENO);
 		close(fds[1]);
+		// close_fds(fds);
 		waitpid(pid, NULL, 0);
 	}
 }

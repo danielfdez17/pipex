@@ -23,31 +23,37 @@
 # include "../libft/inc/headers/libft.h"
 # include "../libft/inc/headers/ft_printf.h"
 
-# ifndef FALSE
-#  define FALSE 0
-# endif
-# ifndef TRUE
-#  define TRUE 1
-# endif
+typedef struct s_pipex
+{
+	int		infile;
+	int		outfile;
+	int		pipe_prev[2];
+	int		pipe_curr[2];
+	pid_t	pid;
+	int		i;
+}	t_pipex;
 
 // * ERROR HANDLERS
-void	error_bonus(void);
-void	cmd_not_found_bonus(char **argv, char *path);
+void	error(void);
+void	cmd_not_found(char **argv, char *path);
 
 // * FILES HANDLERS
-void	close_fds_bonus(int *fds);
-int		open_read_file_bonus(char *filename);
-int		open_write_file_bonus(char *filename);
-void	ft_dup2_bonus(int oldfd, int newfd);
+void	close_fds(int *fds);
+int		open_read_file(char *filename);
+int		open_write_file(char *filename);
+void	ft_dup2(int oldfd, int newfd);
+void	init_pipe_ends(int fds[2]);
+void	update_pipe_ends(int prev[2], int curr[2]);
+void	close_files(int infile, int outfile);
 
 // * MEMORY HANDLERS
-void	free_split_bonus(char **split);
+void	free_split(char **split);
 
 // * COMMANDS HANDLERS
-char	*get_path_bonus(char *cmd, char **envp);
+char	*get_path(char *cmd, char **envp);
 int		run_first_cmd(char **av, int *fds, char **envp);
 int		run_last_cmd(int ac, char **av, int *fds, char **envp);
-void	run_command_bonus(char *cmd, char **envp);
-void	run_i_cmd_bonus(char **av, int *fds, char **envp, int cmd);
+void	run_command(char *cmd, char **envp);
+void	run_i_cmd(char **av, char **envp, int cmd);
 
 #endif // PIPEX_BONUS_H

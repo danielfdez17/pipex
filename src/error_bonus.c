@@ -6,11 +6,11 @@
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 08:06:31 by danfern3          #+#    #+#             */
-/*   Updated: 2025/11/14 15:32:45 by danfern3         ###   ########.fr       */
+/*   Updated: 2025/11/10 12:25:36 by danfern3         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/headers/pipex.h"
+#include "../inc/headers/pipex_bonus.h"
 
 /**
  * Prints the error and terminates the program execution

@@ -15,7 +15,7 @@
 /**
  * Frees the memory used by @param split
  */
-void	free_split_bonus(char **split)
+void	free_split(char **split)
 {
 	int	i;
 
