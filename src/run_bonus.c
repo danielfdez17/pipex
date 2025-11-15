@@ -102,7 +102,6 @@ int	run_first_cmd(char **av, int *fds, char **envp)
 	ft_dup2(fd, STDIN_FILENO);
 	ft_dup2(fds[1], STDOUT_FILENO);
 	close_fds(fds);
-	// close(fds[0]);
 	run_command(av[2], envp);
 	return (fd);
 }
@@ -150,7 +149,6 @@ void	run_i_cmd(char **av, char **envp, int cmd)
 	{
 		ft_dup2(fds[0], STDIN_FILENO);
 		close(fds[1]);
-		// close_fds(fds);
 		waitpid(pid, NULL, 0);
 	}
 }

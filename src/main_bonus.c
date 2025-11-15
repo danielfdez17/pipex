@@ -13,169 +13,8 @@
 #include "../inc/headers/pipex_bonus.h"
 
 /**
- * Main function that creates two child processes
- * to execute the commands received in @param av
+ * Initializes the t_pipex structure
  */
-// int	main(int ac, char **av, char **envp)
-// {
-// 	// int	fd_read;
-// 	// int	fd_write;
-// 	int	status;
-// 	int	i;
-// 	int	fds[2];
-// 	pid_t pid1, pid2, pid3;
-// 	(void)pid2;
-
-// 	if (ac < 5)
-// 		return (0);
-// 	if (pipe(fds) == -1)
-// 		error();
-// 	pid1 = fork();
-// 	if (pid1 < 0)
-// 		error();
-// 	if (pid1 == 0)
-// 		run_first_cmd(av, fds, envp);
-
-// 	// ft_dup2(fd_read, STDIN_FILENO);
-// 	// ! este bucle lo puede hacer un pid3, como la lectura y escritura
-// 	// pid2 = fork();
-// 	// if (pid2 < 0)
-// 	// 	error();
-// 	i = 3;
-// 	// if (pid2 == 0)
-// 	// {
-// 		while (i < ac - 2)
-// 			run_i_cmd(av, envp, i++);
-// 	// }
-// 	pid3 = fork();
-// 	if (pid3 < 0)
-// 		error();
-// 	if (pid3 == 0)
-// 		run_last_cmd(ac, av, fds, envp);
-// 	// fd_read = open_read_file(av[1]);
-// 	// fd_write = open_write_file(av[ac - 1]);
-// 	// if (pipe(fds) < 0)
-// 	// 	error();
-// 	// ft_calloc(sizeof(char *), 10);
-// 	// return (0);
-
-// 	// run_command(av[ac - 2], envp);
-// 	close_fds(fds);
-// 	waitpid(pid1, &status, 0);
-// 	// waitpid(pid2, &status, 0);
-// 	waitpid(pid3, &status, 0);
-// 	if (WIFEXITED(status))
-// 		exit(WEXITSTATUS(status));
-// 	return (0);
-// }
-
-void	init_pipe_ends(int fds[2])
-{
-	fds[0] = -1;
-	fds[1] = -1;
-}
-
-void	close_files(int infile, int outfile)
-{
-	close(infile);
-	close(outfile);
-}
-
-void	update_pipe_ends(int prev[2], int curr[2])
-{
-	prev[0] = curr[0];
-	prev[1] = curr[1];
-}
-
-// int main(int ac, char **av, char **envp)
-// {
-//     int     i;
-//     int     pipe_prev[2];
-//     int     pipe_curr[2];
-//     pid_t   pid;
-//     int     infile;
-//     int     outfile;
-
-//     if (ac < 5)
-//         error();
-
-//     infile = open(av[1], O_RDONLY);
-//     if (infile < 0)
-// 	{
-//         perror(av[1]);
-// 		infile = open("/dev/null", O_RDONLY);
-// 	}
-
-//     outfile = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-//     if (outfile < 0)
-//         error();
-
-//     // pipe_prev no existe todavía
-// 	init_pipe_ends(pipe_prev);
-
-//     i = 2;
-//     while (i < ac - 1)
-//     {
-//         if (i != ac - 2) // no es el último comando
-//         {
-//             if (pipe(pipe_curr) < 0)
-//                 error();
-//         }
-
-//         pid = fork();
-//         if (pid < 0)
-//             error();
-
-//         if (pid == 0)
-//         {
-//             /* ----- CHILD ----- */
-
-//             // Si existe una pipe anterior: conectar a STDIN
-//             if (pipe_prev[0] != -1)
-//                 ft_dup2(pipe_prev[0], STDIN_FILENO);
-//             else
-//                 ft_dup2(infile, STDIN_FILENO);
-
-//             // Si no es el último comando: redireccionar STDOUT al pipe nuevo
-//             if (i != ac - 2)
-//                 ft_dup2(pipe_curr[1], STDOUT_FILENO);
-//             else
-//                 ft_dup2(outfile, STDOUT_FILENO);
-
-//             // Cerrar restos en child
-// 			close_fds(pipe_prev);
-
-//             if (i != ac - 2)
-// 				close_fds(pipe_curr);
-// 			close_files(infile, outfile);
-
-//             run_command(av[i], envp);
-//             exit(1);
-//         }
-
-//         /* ----- PARENT ----- */
-
-//         // cerrar pipe anterior
-// 		close_fds(pipe_prev);
-
-//         // mover pipe_curr a pipe_prev
-//         if (i != ac - 2)
-// 			update_pipe_ends(pipe_prev, pipe_curr);
-
-//         i++;
-//     }
-
-//     // cerrar pipes finales
-// 	close_fds(pipe_prev);
-// 	close_files(infile, outfile);
-
-//     // esperar a todos los hijos
-//     while (wait(NULL) > 0)
-//         ;
-
-//     return (0);
-// }
-
 static t_pipex	init_pipex(int ac, char **av)
 {
 	t_pipex	pipex;
@@ -194,7 +33,10 @@ static t_pipex	init_pipex(int ac, char **av)
 	return (pipex);
 }
 
-static void child_process(int ac, char **av, char **envp, t_pipex *pipex)
+/**
+ * Function executed by the child process
+ */
+static void	child_process(int ac, char **av, char **envp, t_pipex *pipex)
 {
 	if (pipex->pipe_prev[0] != -1)
 		ft_dup2(pipex->pipe_prev[0], STDIN_FILENO);
@@ -212,7 +54,10 @@ static void child_process(int ac, char **av, char **envp, t_pipex *pipex)
 	exit(1);
 }
 
-static void create_child(int ac, char **av, char **envp, t_pipex *pipex)
+/**
+ * Creates a child process to run the command
+ */
+static void	create_child(int ac, char **av, char **envp, t_pipex *pipex)
 {
 	pipex->pid = fork();
 	if (pipex->pid < 0)
@@ -221,9 +66,13 @@ static void create_child(int ac, char **av, char **envp, t_pipex *pipex)
 		child_process(ac, av, envp, pipex);
 }
 
-int main(int ac, char **av, char **envp)
+/**
+ * Main function that creates a child processes
+ * to execute the commands received in @param av
+ */
+int	main(int ac, char **av, char **envp)
 {
-	t_pipex pipex;
+	t_pipex	pipex;
 
 	if (ac < 5)
 		error();

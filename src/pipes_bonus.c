@@ -1,37 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   pipes_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/10 08:06:31 by danfern3          #+#    #+#             */
-/*   Updated: 2025/11/10 12:25:36 by danfern3         ###   ########.fr       */
+/*   Created: 2025/11/10 08:07:54 by danfern3          #+#    #+#             */
+/*   Updated: 2025/11/10 12:38:25 by danfern3         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/headers/pipex_bonus.h"
 
 /**
- * Prints the error and terminates the program execution
+ * Initializes the pipe @param fds ends to -1
  */
-void	error(void)
+void	init_pipe_ends(int fds[2])
 {
-	perror(NULL);
-	exit(EXIT_FAILURE);
+	fds[0] = -1;
+	fds[1] = -1;
 }
 
 /**
- * Frees the memory used by @param argv and @param path,
- * prints an error msg and terminates the program
+ * Closes both files descriptors @param infile and @param outfile
  */
-void	cmd_not_found(char **argv, char *path)
+void	close_files(int infile, int outfile)
 {
-	perror(NULL);
-	if (path)
-		free(path);
-	path = NULL;
-	if (argv)
-		free_split(argv);
-	exit(errno);
+	close(infile);
+	close(outfile);
+}
+
+/**
+ * Updates the @param prev pipe ends with the @param curr pipe ends
+ */
+void	update_pipe_ends(int prev[2], int curr[2])
+{
+	prev[0] = curr[0];
+	prev[1] = curr[1];
 }

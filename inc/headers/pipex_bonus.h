@@ -39,8 +39,10 @@ void	cmd_not_found(char **argv, char *path);
 
 // * FILES HANDLERS
 void	close_fds(int *fds);
-int		open_read_file(char *filename);
-int		open_write_file(char *filename);
+// ! NO
+// int		open_read_file(char *filename);
+// ! NO
+// int		open_write_file(char *filename);
 void	ft_dup2(int oldfd, int newfd);
 void	init_pipe_ends(int fds[2]);
 void	update_pipe_ends(int prev[2], int curr[2]);
@@ -51,9 +53,12 @@ void	free_split(char **split);
 
 // * COMMANDS HANDLERS
 char	*get_path(char *cmd, char **envp);
-int		run_first_cmd(char **av, int *fds, char **envp);
-int		run_last_cmd(int ac, char **av, int *fds, char **envp);
+// ! NO
+// int		run_first_cmd(char **av, int *fds, char **envp);
+// ! NO
+// int		run_last_cmd(int ac, char **av, int *fds, char **envp);
 void	run_command(char *cmd, char **envp);
-void	run_i_cmd(char **av, char **envp, int cmd);
+// ! NO
+// void	run_i_cmd(char **av, char **envp, int cmd);
 
 #endif // PIPEX_BONUS_H
