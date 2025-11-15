@@ -69,6 +69,12 @@
 // 	return (0);
 // }
 
+void	init_pipe_ends(int fds[2])
+{
+	fds[0] = -1;
+	fds[1] = -1;
+}
+
 int main(int ac, char **av, char **envp)
 {
     int     i;
@@ -93,8 +99,7 @@ int main(int ac, char **av, char **envp)
         error();
 
     // pipe_prev no existe todavía
-    pipe_prev[0] = -1;
-    pipe_prev[1] = -1;
+	init_pipe_ends(pipe_prev);
 
     i = 2;
     while (i < ac - 1)
