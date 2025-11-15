@@ -35,12 +35,6 @@ char	*get_path(char *cmd, char **envp)
 		if (access(path, F_OK) == 0 && access(path, X_OK) == 0)
 		{
 			free_split(split_path);
-			// if (access(path, X_OK) != 0)
-			// {
-			// 	free(path);
-			// 	error();
-			// 	// return (NULL);
-			// }
 			return (path);
 		}
 		free(path);
@@ -93,20 +87,17 @@ int	run_first_cmd(char **av, int *fds, char **envp)
 	{
 		close_fds(fds);
 		error();
-		return (errno);
 	}
 	if (access(av[1], R_OK) != 0)
 	{
 		close_fds(fds);
 		error();
-		return (errno);
 	}
 	fd = open(av[1], O_RDONLY, 0644);
 	if (fd < 0)
 	{
 		close_fds(fds);
 		error();
-		return (errno);
 	}
 	ft_dup2(fd, STDIN_FILENO);
 	ft_dup2(fds[1], STDOUT_FILENO);

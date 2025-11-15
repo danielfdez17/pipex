@@ -41,10 +41,6 @@ int	main(int ac, char **av, char **envp)
 	waitpid(pid1, &status, 0);
 	waitpid(pid2, &status, 0);
 	if (WIFEXITED(status))
-	{
-		// ft_printf("First command exited with status: %d\n", WEXITSTATUS(status));
 		exit(WEXITSTATUS(status));
-	}
-	// waitpid(pid2, NULL, 0);
 	return (0);
 }
