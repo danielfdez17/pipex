@@ -120,23 +120,15 @@ int main(int ac, char **av, char **envp)
 
             // Si existe una pipe anterior: conectar a STDIN
             if (pipe_prev[0] != -1)
-            {
-                dup2(pipe_prev[0], STDIN_FILENO);
-            }
+                ft_dup2(pipe_prev[0], STDIN_FILENO);
             else
-            {
-                dup2(infile, STDIN_FILENO);
-            }
+                ft_dup2(infile, STDIN_FILENO);
 
             // Si no es el último comando: redireccionar STDOUT al pipe nuevo
             if (i != ac - 2)
-            {
-                dup2(pipe_curr[1], STDOUT_FILENO);
-            }
+                ft_dup2(pipe_curr[1], STDOUT_FILENO);
             else
-            {
-                dup2(outfile, STDOUT_FILENO);
-            }
+                ft_dup2(outfile, STDOUT_FILENO);
 
             // Cerrar restos en child
             if (pipe_prev[0] != -1)
