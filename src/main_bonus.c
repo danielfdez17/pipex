@@ -69,85 +69,117 @@
 // 	return (0);
 // }
 
-void	init_pipe_ends(int fds[2])
-{
-	fds[0] = -1;
-	fds[1] = -1;
-}
-void	update_pipe_ends(int prev[2], int curr[2])
-{
-	prev[0] = curr[0];
-	prev[1] = curr[1];
-}
-void	close_files(int infile, int outfile)
-{
-	close(infile);
-	close(outfile);
-}
-
-static t_pipex	*init_pipex(int ac, char **av)
-{
-	t_pipex	*pipex;
-
-	pipex = malloc(sizeof(t_pipex));
-	if (!pipex)
-		error();
-	pipex->infile = open(av[1], O_RDONLY);
-	if (pipex->infile < 0)
-	{
-		perror(av[1]);
-		pipex->infile = open("/dev/null", O_RDONLY);
-	}
-	pipex->outfile = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (pipex->outfile < 0)
-		error();
-	init_pipe_ends(pipex->pipe_prev);
-	pipex->i = 2;
-	return (pipex);
-}
-
 int main(int ac, char **av, char **envp)
 {
-	t_pipex *pipex;
+    int     i;
+    int     pipe_prev[2];
+    int     pipe_curr[2];
+    pid_t   pid;
+    int     infile;
+    int     outfile;
 
-	if (ac < 5)
-		error();
-	pipex = init_pipex(ac, av);
-	while (pipex->i < ac - 1)
+    if (ac < 5)
+        error();
+
+    infile = open(av[1], O_RDONLY);
+    if (infile < 0)
 	{
-		if (pipex->i != ac - 2)
-		{
-			if (pipe(pipex->pipe_curr) < 0)
-				error();
-		}
-		pipex->pid = fork();
-		if (pipex->pid < 0)
-			error();
-		if (pipex->pid == 0)
-		{
-			if (pipex->pipe_prev[0] != -1)
-				ft_dup2(pipex->pipe_prev[0], STDIN_FILENO);
-			else
-				ft_dup2(pipex->infile, STDIN_FILENO);
-			if (pipex->i != ac - 2)
-				ft_dup2(pipex->pipe_curr[1], STDOUT_FILENO);
-			else
-				ft_dup2(pipex->outfile, STDOUT_FILENO);
-			close_fds(pipex->pipe_prev);
-			if (pipex->i != ac - 2)
-				close_fds(pipex->pipe_curr);
-			close_files(pipex->infile, pipex->outfile);
-			run_command(av[pipex->i], envp);
-			exit(EXIT_SUCCESS);
-		}
-		close_fds(pipex->pipe_prev);
-		if (pipex->i != ac - 2)
-			update_pipe_ends(pipex->pipe_prev, pipex->pipe_curr);
-		pipex->i++;
+        perror(av[1]);
+		infile = open("/dev/null", O_RDONLY);
 	}
-	close_fds(pipex->pipe_prev);
-	close_files(pipex->infile, pipex->outfile);
-	while (wait(NULL) > 0)
-		;
-	return (0);
+
+    outfile = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (outfile < 0)
+        error();
+
+    // pipe_prev no existe todavía
+    pipe_prev[0] = -1;
+    pipe_prev[1] = -1;
+
+    i = 2;
+    while (i < ac - 1)
+    {
+        if (i != ac - 2) // no es el último comando
+        {
+            if (pipe(pipe_curr) < 0)
+                error();
+        }
+
+        pid = fork();
+        if (pid < 0)
+            error();
+
+        if (pid == 0)
+        {
+            /* ----- CHILD ----- */
+
+            // Si existe una pipe anterior: conectar a STDIN
+            if (pipe_prev[0] != -1)
+            {
+                dup2(pipe_prev[0], STDIN_FILENO);
+            }
+            else
+            {
+                dup2(infile, STDIN_FILENO);
+            }
+
+            // Si no es el último comando: redireccionar STDOUT al pipe nuevo
+            if (i != ac - 2)
+            {
+                dup2(pipe_curr[1], STDOUT_FILENO);
+            }
+            else
+            {
+                dup2(outfile, STDOUT_FILENO);
+            }
+
+            // Cerrar restos en child
+            if (pipe_prev[0] != -1)
+                close(pipe_prev[0]);
+            if (pipe_prev[1] != -1)
+                close(pipe_prev[1]);
+
+            if (i != ac - 2)
+            {
+                close(pipe_curr[0]);
+                close(pipe_curr[1]);
+            }
+
+            close(infile);
+            close(outfile);
+
+            run_command(av[i], envp);
+            exit(1);
+        }
+
+        /* ----- PARENT ----- */
+
+        // cerrar pipe anterior
+        if (pipe_prev[0] != -1)
+            close(pipe_prev[0]);
+        if (pipe_prev[1] != -1)
+            close(pipe_prev[1]);
+
+        // mover pipe_curr a pipe_prev
+        if (i != ac - 2)
+        {
+            pipe_prev[0] = pipe_curr[0];
+            pipe_prev[1] = pipe_curr[1];
+        }
+
+        i++;
+    }
+
+    // cerrar pipes finales
+    if (pipe_prev[0] != -1) close(pipe_prev[0]);
+    if (pipe_prev[1] != -1) close(pipe_prev[1]);
+
+    close(infile);
+    close(outfile);
+
+    // esperar a todos los hijos
+    while (wait(NULL) > 0)
+        ;
+
+    return (0);
 }
