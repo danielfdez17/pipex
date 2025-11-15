@@ -28,25 +28,13 @@ INCLUDES = -I ./inc/headers -I ./inc/libft/inc/headers/
 # * Objects dir
 OBJ_DIR = ./src/obj/
 
-# * Bonus objects dir
-BONUS_OBJ_DIR = ./bonus/obj/
-
 # * Sources files
 PIPEX_DIR = ./src/
 PIPEX_SRCS = $(shell ls $(PIPEX_DIR) | grep -E ".+\.c")
 SRCS = $(PIPEX_SRCS)
 
-# * Bonus sources files
-BONUS_PIPEX_DIR = ./bonus/
-BONUS_PIPEX_SRCS = $(shell ls $(BONUS_PIPEX_DIR) | grep -E ".+\.c")
-BONUS_SRCS = $(BONUS_PIPEX_SRCS)
-
 # * Creating object files
 OBJS = $(addprefix $(OBJ_DIR), $(PIPEX_SRCS:.c=.o))
-
-# * Creating bonus object files
-BONUS_OBJS = $(addprefix $(BONUS_OBJ_DIR), $(BONUS_PIPEX_SRCS:.c=.o))
-
 
 # * LIBFT
 LIBFT_DIR = ./inc/libft/
@@ -56,10 +44,6 @@ LIBFT = ./inc/libft/libft.a
 # ? Links a .c (and .h if needed) to its .o file
 $(OBJ_DIR)%.o: $(PIPEX_DIR)%.c
 	@mkdir -p $(OBJ_DIR)
-	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
-
-$(BONUS_OBJ_DIR)%.o: $(BONUS_PIPEX_DIR)%.c
-	@mkdir -p $(BONUS_OBJ_DIR)
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 # ? main program compilation
@@ -76,20 +60,12 @@ $(LIBFT):
 # ? Compiles the whole program/library
 all: obj $(NAME)
 
-# bonus: bonus_obj $(BONUS_OBJS) $(LIBFT)
-# 	@clear
-# 	@$(CC) $(CFLAGS) $(INCLUDES) $(BONUS_OBJS) $(LIBFT) -o $(NAME)
-# 	@echo "Compiling bonus $(NAME)"
-
 obj:
 	@mkdir -p $(OBJ_DIR)
 
-bonus_obj:
-	@mkdir -p $(BONUS_OBJ_DIR)
-
 # ? Removes the object files
 clean:
-	@$(RM) $(OBJS) $(BONUS_OBJS)
+	@$(RM) $(OBJS)
 	@$(MAKE) -C $(LIBFT_DIR) clean
 	@echo "Removing .o files"
 
@@ -104,11 +80,6 @@ re: fclean all
 	@echo "Rebuilding $(LIBFT)"
 	@$(MAKE) -C $(LIBFT_DIR) re
 	@echo "Rebuilding $(NAME)"
-
-# rebonus: fclean bonus
-# 	@echo "Rebuilding $(LIBFT)"
-# 	@$(MAKE) -C $(LIBFT_DIR) re
-# 	@echo "Rebuilding $(NAME)"
 
 # ! Automating / Debugging rules
 # INPUT = infile "ls -l" "grep Oct" "wc -l" outfile
@@ -127,10 +98,6 @@ valgrind: all
 	valgrind ./$(NAME) $(INPUT)
 
 debug: all
-	clear
-	gdb ./$(NAME)
-
-debug_bonus: bonus
 	clear
 	gdb ./$(NAME)
 

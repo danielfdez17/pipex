@@ -87,91 +87,165 @@ void	update_pipe_ends(int prev[2], int curr[2])
 	prev[1] = curr[1];
 }
 
+// int main(int ac, char **av, char **envp)
+// {
+//     int     i;
+//     int     pipe_prev[2];
+//     int     pipe_curr[2];
+//     pid_t   pid;
+//     int     infile;
+//     int     outfile;
+
+//     if (ac < 5)
+//         error();
+
+//     infile = open(av[1], O_RDONLY);
+//     if (infile < 0)
+// 	{
+//         perror(av[1]);
+// 		infile = open("/dev/null", O_RDONLY);
+// 	}
+
+//     outfile = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+//     if (outfile < 0)
+//         error();
+
+//     // pipe_prev no existe todavía
+// 	init_pipe_ends(pipe_prev);
+
+//     i = 2;
+//     while (i < ac - 1)
+//     {
+//         if (i != ac - 2) // no es el último comando
+//         {
+//             if (pipe(pipe_curr) < 0)
+//                 error();
+//         }
+
+//         pid = fork();
+//         if (pid < 0)
+//             error();
+
+//         if (pid == 0)
+//         {
+//             /* ----- CHILD ----- */
+
+//             // Si existe una pipe anterior: conectar a STDIN
+//             if (pipe_prev[0] != -1)
+//                 ft_dup2(pipe_prev[0], STDIN_FILENO);
+//             else
+//                 ft_dup2(infile, STDIN_FILENO);
+
+//             // Si no es el último comando: redireccionar STDOUT al pipe nuevo
+//             if (i != ac - 2)
+//                 ft_dup2(pipe_curr[1], STDOUT_FILENO);
+//             else
+//                 ft_dup2(outfile, STDOUT_FILENO);
+
+//             // Cerrar restos en child
+// 			close_fds(pipe_prev);
+
+//             if (i != ac - 2)
+// 				close_fds(pipe_curr);
+// 			close_files(infile, outfile);
+
+//             run_command(av[i], envp);
+//             exit(1);
+//         }
+
+//         /* ----- PARENT ----- */
+
+//         // cerrar pipe anterior
+// 		close_fds(pipe_prev);
+
+//         // mover pipe_curr a pipe_prev
+//         if (i != ac - 2)
+// 			update_pipe_ends(pipe_prev, pipe_curr);
+
+//         i++;
+//     }
+
+//     // cerrar pipes finales
+// 	close_fds(pipe_prev);
+// 	close_files(infile, outfile);
+
+//     // esperar a todos los hijos
+//     while (wait(NULL) > 0)
+//         ;
+
+//     return (0);
+// }
+
+static t_pipex	init_pipex(int ac, char **av)
+{
+	t_pipex	pipex;
+
+	pipex.infile = open(av[1], O_RDONLY);
+	if (pipex.infile < 0)
+	{
+		perror(av[1]);
+		pipex.infile = open("/dev/null", O_RDONLY);
+	}
+	pipex.outfile = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (pipex.outfile < 0)
+		error();
+	init_pipe_ends(pipex.pipe_prev);
+	pipex.i = 2;
+	return (pipex);
+}
+
+static void child_process(int ac, char **av, char **envp, t_pipex *pipex)
+{
+	if (pipex->pipe_prev[0] != -1)
+		ft_dup2(pipex->pipe_prev[0], STDIN_FILENO);
+	else
+		ft_dup2(pipex->infile, STDIN_FILENO);
+	if (pipex->i != ac - 2)
+		ft_dup2(pipex->pipe_curr[1], STDOUT_FILENO);
+	else
+		ft_dup2(pipex->outfile, STDOUT_FILENO);
+	close_fds(pipex->pipe_prev);
+	if (pipex->i != ac - 2)
+		close_fds(pipex->pipe_curr);
+	close_files(pipex->infile, pipex->outfile);
+	run_command(av[pipex->i], envp);
+	exit(1);
+}
+
+static void create_child(int ac, char **av, char **envp, t_pipex *pipex)
+{
+	pipex->pid = fork();
+	if (pipex->pid < 0)
+		error();
+	if (pipex->pid == 0)
+		child_process(ac, av, envp, pipex);
+}
+
 int main(int ac, char **av, char **envp)
 {
-    int     i;
-    int     pipe_prev[2];
-    int     pipe_curr[2];
-    pid_t   pid;
-    int     infile;
-    int     outfile;
+	t_pipex pipex;
 
-    if (ac < 5)
-        error();
-
-    infile = open(av[1], O_RDONLY);
-    if (infile < 0)
+	if (ac < 5)
+		error();
+	pipex = init_pipex(ac, av);
+	init_pipe_ends(pipex.pipe_prev);
+	pipex.i = 2;
+	while (pipex.i < ac - 1)
 	{
-        perror(av[1]);
-		infile = open("/dev/null", O_RDONLY);
+		if (pipex.i != ac - 2)
+		{
+			if (pipe(pipex.pipe_curr) < 0)
+				error();
+		}
+		create_child(ac, av, envp, &pipex);
+		close_fds(pipex.pipe_prev);
+		if (pipex.i != ac - 2)
+			update_pipe_ends(pipex.pipe_prev, pipex.pipe_curr);
+		pipex.i++;
 	}
-
-    outfile = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if (outfile < 0)
-        error();
-
-    // pipe_prev no existe todavía
-	init_pipe_ends(pipe_prev);
-
-    i = 2;
-    while (i < ac - 1)
-    {
-        if (i != ac - 2) // no es el último comando
-        {
-            if (pipe(pipe_curr) < 0)
-                error();
-        }
-
-        pid = fork();
-        if (pid < 0)
-            error();
-
-        if (pid == 0)
-        {
-            /* ----- CHILD ----- */
-
-            // Si existe una pipe anterior: conectar a STDIN
-            if (pipe_prev[0] != -1)
-                ft_dup2(pipe_prev[0], STDIN_FILENO);
-            else
-                ft_dup2(infile, STDIN_FILENO);
-
-            // Si no es el último comando: redireccionar STDOUT al pipe nuevo
-            if (i != ac - 2)
-                ft_dup2(pipe_curr[1], STDOUT_FILENO);
-            else
-                ft_dup2(outfile, STDOUT_FILENO);
-
-            // Cerrar restos en child
-			close_fds(pipe_prev);
-
-            if (i != ac - 2)
-				close_fds(pipe_curr);
-			close_files(infile, outfile);
-
-            run_command(av[i], envp);
-            exit(1);
-        }
-
-        /* ----- PARENT ----- */
-
-        // cerrar pipe anterior
-		close_fds(pipe_prev);
-
-        // mover pipe_curr a pipe_prev
-        if (i != ac - 2)
-			update_pipe_ends(pipe_prev, pipe_curr);
-
-        i++;
-    }
-
-    // cerrar pipes finales
-	close_fds(pipe_prev);
-	close_files(infile, outfile);
-
-    // esperar a todos los hijos
-    while (wait(NULL) > 0)
-        ;
-
-    return (0);
+	close_fds(pipex.pipe_prev);
+	close_files(pipex.infile, pipex.outfile);
+	while (wait(NULL) > 0)
+		;
+	return (0);
 }
