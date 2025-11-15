@@ -18,7 +18,6 @@
 void	error(void)
 {
 	perror(NULL);
-	// ft_putendl_fd(strerror(errno), STDERR_FILENO);
 	exit(EXIT_FAILURE);
 }
 
@@ -29,13 +28,10 @@ void	error(void)
 void	cmd_not_found(char **argv, char *path)
 {
 	perror(NULL);
-	// ft_putstr_fd(" ", STDERR_FILENO);
-	// ft_putstr_fd(argv[0], STDERR_FILENO);
 	if (path)
 		free(path);
 	path = NULL;
 	if (argv)
 		free_split(argv);
 	exit(errno);
-	// error();
 }
