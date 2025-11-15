@@ -81,6 +81,12 @@ void	close_files(int infile, int outfile)
 	close(outfile);
 }
 
+void	update_pipe_ends(int prev[2], int curr[2])
+{
+	prev[0] = curr[0];
+	prev[1] = curr[1];
+}
+
 int main(int ac, char **av, char **envp)
 {
     int     i;
@@ -154,10 +160,7 @@ int main(int ac, char **av, char **envp)
 
         // mover pipe_curr a pipe_prev
         if (i != ac - 2)
-        {
-            pipe_prev[0] = pipe_curr[0];
-            pipe_prev[1] = pipe_curr[1];
-        }
+			update_pipe_ends(pipe_prev, pipe_curr);
 
         i++;
     }
