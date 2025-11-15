@@ -75,6 +75,12 @@ void	init_pipe_ends(int fds[2])
 	fds[1] = -1;
 }
 
+void	close_files(int infile, int outfile)
+{
+	close(infile);
+	close(outfile);
+}
+
 int main(int ac, char **av, char **envp)
 {
     int     i;
@@ -141,9 +147,7 @@ int main(int ac, char **av, char **envp)
                 close(pipe_curr[0]);
                 close(pipe_curr[1]);
             }
-
-            close(infile);
-            close(outfile);
+			close_files(infile, outfile);
 
             run_command(av[i], envp);
             exit(1);
@@ -171,8 +175,7 @@ int main(int ac, char **av, char **envp)
     if (pipe_prev[0] != -1) close(pipe_prev[0]);
     if (pipe_prev[1] != -1) close(pipe_prev[1]);
 
-    close(infile);
-    close(outfile);
+	close_files(infile, outfile);
 
     // esperar a todos los hijos
     while (wait(NULL) > 0)
