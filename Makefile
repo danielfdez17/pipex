@@ -6,7 +6,7 @@
 #    By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/10 09:34:42 by danfern3          #+#    #+#              #
-#    Updated: 2025/11/10 11:09:21 by danfern3         ###   ########.fr        #
+#    Updated: 2025/11/17 08:31:11 by danfern3         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,13 @@ OBJ_DIR = ./src/obj/
 
 # * Sources files
 PIPEX_DIR = ./src/
-PIPEX_SRCS = $(shell ls $(PIPEX_DIR) | grep -E ".+\.c")
+# PIPEX_SRCS = $(shell ls $(PIPEX_DIR) | grep -E ".+\.c")
+PIPEX_SRCS =	error_bonus.c \
+				files_bonus.c \
+				free_bonus.c \
+				main_bonus.c \
+				pipes_bonus.c \
+				run_bonus.c
 SRCS = $(PIPEX_SRCS)
 
 # * Creating object files
@@ -57,6 +63,8 @@ $(LIBFT):
 	@$(MAKE) -C $(LIBFT_DIR) all
 	@echo "Compiling libft"
 
+bonus: all
+
 # ? Compiles the whole program/library
 all: obj $(NAME)
 
@@ -76,33 +84,33 @@ fclean: clean
 	@echo "Removing $(NAME)"
 
 # ? Rebuilds the program/library
-re: fclean all
+rebonus: fclean all
 	@echo "Rebuilding $(LIBFT)"
 	@$(MAKE) -C $(LIBFT_DIR) re
 	@echo "Rebuilding $(NAME)"
 
 # ! Automating / Debugging rules
 # INPUT = infile "ls -l" "grep Oct" "wc -l" outfile
-INPUT = infile "ls -l" "wc -l" outfile
+# INPUT = infile "ls -l" "wc -l" outfile
 
-run: all
-	clear
-	./$(NAME) $(INPUT)
+# run: all
+# 	clear
+# 	./$(NAME) $(INPUT)
 
-run2: all
-	clear
-	./$(NAME) infile "grep Makefile" "wc -w" outfile
+# run2: all
+# 	clear
+# 	./$(NAME) infile "grep Makefile" "wc -w" outfile
 
-valgrind: all
-	clear
-	valgrind ./$(NAME) $(INPUT)
+# valgrind: all
+# 	clear
+# 	valgrind ./$(NAME) $(INPUT)
 
-debug: all
-	clear
-	gdb ./$(NAME)
+# debug: all
+# 	clear
+# 	gdb ./$(NAME)
 
 # Protects all rules from files with same name
-.PHONY: all obj clean fclean re run valgrind debug
+.PHONY: all bonus obj clean fclean re run valgrind debug
 
 # Indicates the main rule to be executed when only 'make' is called
 .GOAL: all
