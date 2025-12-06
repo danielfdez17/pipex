@@ -8,7 +8,7 @@ git clone https://github.com/danielfdez17/pipex.git
 cd pipex
 ```
 ## Build
-If you have make installed in your system, justbBuild the project with make. Otherwise, you will need to install it.
+If you have make installed in your system, just build the project with make. Otherwise, you will need to install it.
 ```bash
 make
 ```
