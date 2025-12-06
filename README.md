@@ -16,10 +16,10 @@ make
 ## Usage
 It is necessary to indicate the first four params. On the other hand, the last one is optional.
 ```bash
-./pipex infile cmd cmd outfile
+./pipex infile cmd ... cmd outfile
 ```
 
 ## Example usage
 ```bash
-./pipex Makefile "cat" "wc -l" outfile
+./pipex Makefile "cat" "grep NAME" "wc -l" outfile
 ```
