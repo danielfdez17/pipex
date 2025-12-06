@@ -14,7 +14,7 @@ make
 ```
 
 ## Usage
-It is necessary to indicate the first four params. On the other hand, the last one is optional.
+It is necessary to indicate at least four params.
 ```bash
 ./pipex infile cmd ... cmd outfile
 ```
