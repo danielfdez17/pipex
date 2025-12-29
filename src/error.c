@@ -17,6 +17,8 @@
  */
 void	error(void)
 {
+	if (errno == 0)
+		return ;
 	perror(NULL);
 	exit(EXIT_FAILURE);
 }
