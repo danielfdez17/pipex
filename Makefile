@@ -9,7 +9,13 @@
 #    Updated: 2025/11/14 15:18:18 by danfern3         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
+# * Colors and utils
+GREEN = \033[0;32m
+YELLOW = \033[0;33m
+RED = \033[0;31m
+RESET = \033[0m
+OK = $(GREEN)[OK]$(RESET)
+NO_PRINT = --no-print-directory
 
 # * Program name
 NAME = pipex
@@ -23,38 +29,22 @@ CFLAGS += -fsanitize=address
 RM = rm -f
 
 # * Includes
-INCLUDES = -I ./inc/headers -I ./inc/libft/inc/headers/
+INCLUDES = -I ./inc/ -I ./inc/libft/inc/
 
 # * Objects dir
-OBJ_DIR = ./src/obj/
-
-# * Bonus objects dir
-BONUS_OBJ_DIR = ./bonus/obj/
+OBJ_DIR = obj/
 
 # * Sources files
-PIPEX_DIR = ./src/
-PIPEX_SRCS =	error.c \
-				files.c \
-				free.c \
-				main.c \
-				run.c
+PIPEX_DIR = src/
+PIPEX_SRCS =	$(addprefix $(PIPEX_DIR), error.c) \
+				$(addprefix $(PIPEX_DIR), files.c) \
+				$(addprefix $(PIPEX_DIR), free.c) \
+				$(addprefix $(PIPEX_DIR), main.c) \
+				$(addprefix $(PIPEX_DIR), run.c)
 SRCS = $(PIPEX_SRCS)
 
-# * Bonus sources files
-BONUS_PIPEX_DIR = ./bonus/
-BONUS_PIPEX_SRCS =	error_bonus.c \
-					files_bonus.c \
-					free_bonus.c \
-					main_bonus.c \
-					run_bonus.c
-BONUS_SRCS = $(BONUS_PIPEX_SRCS)
-
 # * Creating object files
-OBJS = $(addprefix $(OBJ_DIR), $(PIPEX_SRCS:.c=.o))
-
-# * Creating bonus object files
-BONUS_OBJS = $(addprefix $(BONUS_OBJ_DIR), $(BONUS_PIPEX_SRCS:.c=.o))
-
+OBJS = $(patsubst $(PIPEX_SRCS)%.c, $(OBJ_DIR)%.o, $(SRCS))
 
 # * LIBFT
 LIBFT_DIR = ./inc/libft/
@@ -66,10 +56,6 @@ $(OBJ_DIR)%.o: $(PIPEX_DIR)%.c
 	@mkdir -p $(OBJ_DIR)
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-$(BONUS_OBJ_DIR)%.o: $(BONUS_PIPEX_DIR)%.c
-	@mkdir -p $(BONUS_OBJ_DIR)
-	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
-
 # ? main program compilation
 $(NAME): $(OBJS) $(LIBFT)
 	@clear
@@ -78,7 +64,7 @@ $(NAME): $(OBJS) $(LIBFT)
 
 # ? libft compilation
 $(LIBFT):
-	@$(MAKE) -C $(LIBFT_DIR) all
+	@$(MAKE) -C $(LIBFT_DIR) all $(NO_PRINT)
 	@echo "Compiling libft"
 
 # ? Compiles the whole program/library
@@ -92,31 +78,23 @@ all: obj $(NAME)
 obj:
 	@mkdir -p $(OBJ_DIR)
 
-bonus_obj:
-	@mkdir -p $(BONUS_OBJ_DIR)
-
 # ? Removes the object files
 clean:
 	@$(RM) $(OBJS) $(BONUS_OBJS)
-	@$(MAKE) -C $(LIBFT_DIR) clean
+	@$(MAKE) -C $(LIBFT_DIR) clean $(NO_PRINT)
 	@echo "Removing .o files"
 
 # ? Removes both object and executable files
 fclean: clean
 	@$(RM) $(NAME)
-	@$(MAKE) -C $(LIBFT_DIR) fclean
+	@$(MAKE) -C $(LIBFT_DIR) fclean $(NO_PRINT)
 	@echo "Removing $(NAME)"
 
 # ? Rebuilds the program/library
 re: fclean all
 	@echo "Rebuilding $(LIBFT)"
-	@$(MAKE) -C $(LIBFT_DIR) re
+	@$(MAKE) -C $(LIBFT_DIR) re $(NO_PRINT)
 	@echo "Rebuilding $(NAME)"
-
-# rebonus: fclean bonus
-# 	@echo "Rebuilding $(LIBFT)"
-# 	@$(MAKE) -C $(LIBFT_DIR) re
-# 	@echo "Rebuilding $(NAME)"
 
 # ! Automating / Debugging rules
 # INPUT = infile "ls -l" "grep Oct" "wc -l" outfile
