@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/headers/pipex.h"
+#include "pipex.h"
 
 /**
  * @returns the path stored in @param envp

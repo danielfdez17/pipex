@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/headers/pipex.h"
+#include "pipex.h"
 
 /**
  * Frees the memory used by @param split

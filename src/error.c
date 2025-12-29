@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/headers/pipex.h"
+#include "pipex.h"
 
 /**
  * Prints the error and terminates the program execution
