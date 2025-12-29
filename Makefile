@@ -22,7 +22,7 @@ NAME = pipex
 
 # * Compilation
 CC = cc
-CFLAGS = -Wall -Wextra -Werror # -g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror # -g3 -fsanitize=address
 
 # * Removal
 RM = rm -f
@@ -89,31 +89,24 @@ re: fclean all
 	@echo "$(OK) $(YELLOW)Rebuilt $(NAME)$(RESET)"
 
 # ! Automating / Debugging rules
-# INPUT = infile "ls -l" "grep Oct" "wc -l" outfile
-# INPUT = infile "ls -l" "wc -l" outfile
+run: all
+	clear
+	valgrind --track-fds=yes -s ./$(NAME) infile "ls -l" "wc -l" outfile
 
-# run: all
-# 	clear
-# 	./$(NAME) $(INPUT)
+run2: all
+	clear
+	valgrind --track-fds=yes -s ./$(NAME) infile "cat Makefile" "grep src" outfile
 
-# run2: all
-# 	clear
-# 	./$(NAME) infile "grep Makefile" "wc -w" outfile
-
-# valgrind: all
-# 	clear
-# 	valgrind ./$(NAME) $(INPUT)
+valgrind: all
+	clear
+	valgrind --leak-check=full --track-origins=yes -s ./$(NAME) infile "ls -l" "wc -l" outfile
 
 debug: all
 	clear
 	gdb ./$(NAME)
 
-# debug_bonus: bonus
-# 	clear
-# 	gdb ./$(NAME)
-
 # Protects all rules from files with same name
-.PHONY: all obj clean fclean re run valgrind debug
+.PHONY: all obj clean fclean re run run2 valgrind debug
 
 # Indicates the main rule to be executed when only 'make' is called
 .GOAL: all

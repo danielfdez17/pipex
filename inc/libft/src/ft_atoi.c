@@ -59,7 +59,7 @@ int	ft_atoi(const char *nptr)
 		++i;
 	if (ft_issign(nptr, i, &p_counter, &n_counter))
 		++i;
-	if (n_counter > 1 || p_counter > 1 \
+	if (n_counter > 1 || p_counter > 1
 		|| (n_counter >= 1 && p_counter >= 1))
 		return (0);
 	while (isnumber(nptr, i, &result))

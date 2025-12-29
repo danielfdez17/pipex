@@ -57,11 +57,11 @@ static void	ft_init_counters(unsigned int *i, size_t *w_l_counters)
 	w_l_counters[1] = 0;
 }
 
-static char	**ft_inside_loop(const char *s, char **result, \
+static char	**ft_inside_loop(const char *s, char **result,
 		unsigned int i, size_t *w_l_counters)
 {
-	result[w_l_counters[0]] = \
-	ft_substr(s, i - w_l_counters[1], w_l_counters[1]);
+	result[w_l_counters[0]]
+		= ft_substr(s, i - w_l_counters[1], w_l_counters[1]);
 	if (!result[w_l_counters[0]])
 		return (free_result(result, w_l_counters[0]));
 	++w_l_counters[0];
@@ -89,8 +89,8 @@ char	**ft_split(char const *s, char c)
 			++w_l_counters[1];
 		else
 		{
-			if (w_l_counters[1] != 0 && \
-				!ft_inside_loop(s, result, i, w_l_counters))
+			if (w_l_counters[1] != 0
+				&& !ft_inside_loop(s, result, i, w_l_counters))
 				return (NULL);
 			w_l_counters[1] = 0;
 		}
