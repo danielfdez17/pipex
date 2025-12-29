@@ -1,30 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_bonus.c                                       :+:      :+:    :+:   */
+/*   ft_lstnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/10 08:07:51 by danfern3          #+#    #+#             */
-/*   Updated: 2025/11/10 08:07:52 by danfern3         ###   ########.fr       */
+/*   Created: 2025/10/03 07:46:23 by danfern3          #+#    #+#             */
+/*   Updated: 2025/12/29 08:10:01 by danfern3         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus.h"
+#include "libft.h"
 
-/**
- * Frees the memory used by @param split
- */
-void	free_split(char **split)
+t_list	*ft_lstnew(void *content)
 {
-	int	i;
+	t_list	*result;
 
-	i = 0;
-	while (split && split[i])
-	{
-		free(split[i]);
-		++i;
-	}
-	free(split);
-	split = NULL;
+	result = ft_calloc(1, sizeof(t_list));
+	if (!result)
+		return (NULL);
+	result->content = content;
+	return (result);
 }

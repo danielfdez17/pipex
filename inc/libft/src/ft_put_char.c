@@ -1,30 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_bonus.c                                       :+:      :+:    :+:   */
+/*   ft_put_char.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/10 08:07:51 by danfern3          #+#    #+#             */
-/*   Updated: 2025/11/10 08:07:52 by danfern3         ###   ########.fr       */
+/*   Created: 2025/10/03 07:46:08 by danfern3          #+#    #+#             */
+/*   Updated: 2025/10/16 19:25:16 by danfern3         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus.h"
+#include "ft_printf.h"
 
-/**
- * Frees the memory used by @param split
- */
-void	free_split(char **split)
+int	ft_put_char(char c)
 {
-	int	i;
-
-	i = 0;
-	while (split && split[i])
-	{
-		free(split[i]);
-		++i;
-	}
-	free(split);
-	split = NULL;
+	write(1, &c, 1);
+	return (1);
 }

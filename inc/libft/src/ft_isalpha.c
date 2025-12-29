@@ -1,37 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   ft_isalpha.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/10 08:06:31 by danfern3          #+#    #+#             */
-/*   Updated: 2025/11/10 12:25:36 by danfern3         ###   ########.fr       */
+/*   Created: 2025/10/03 07:46:17 by danfern3          #+#    #+#             */
+/*   Updated: 2025/12/27 12:36:31 by danfern3         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus.h"
-
-/**
- * Prints the error and terminates the program execution
- */
-void	error(void)
+int	ft_isalpha(int c)
 {
-	perror(NULL);
-	exit(EXIT_FAILURE);
+	if ((c >= 'a' && c <= 'z')
+		|| (c >= 'A' && c <= 'Z'))
+		return (1);
+	return (0);
 }
 
-/**
- * Frees the memory used by @param argv and @param path,
- * prints an error msg and terminates the program
- */
-void	cmd_not_found(char **argv, char *path)
-{
-	perror(NULL);
-	if (path)
-		free(path);
-	path = NULL;
-	if (argv)
-		free_split(argv);
-	exit(errno);
-}
+// #include <ctype.h>
+// #include <stdio.h>
+// int main(int ac, char **av)
+// {
+// 	int i = 1;
+// 	while (ac-- > 1)
+// 	{
+// 		printf("char: %c\n", av[i][0]);
+// 		printf("isalpha: %d\n", isalpha(av[i][0]));
+// 		printf("ft_isalpha: %d\n---\n", ft_isalpha(av[i][0]));
+// 		++i;
+// 	}
+// 	return (0);
+// }

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/headers/pipex_bonus.h"
+#include "pipex_bonus.h"
 
 /**
  * Initializes the pipe @param fds ends to -1

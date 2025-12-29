@@ -1,30 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_bonus.c                                       :+:      :+:    :+:   */
+/*   ft_lstdelone.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/10 08:07:51 by danfern3          #+#    #+#             */
-/*   Updated: 2025/11/10 08:07:52 by danfern3         ###   ########.fr       */
+/*   Created: 2025/10/03 07:46:26 by danfern3          #+#    #+#             */
+/*   Updated: 2025/12/27 13:02:11 by danfern3         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus.h"
+#include "libft.h"
 
-/**
- * Frees the memory used by @param split
- */
-void	free_split(char **split)
+void	ft_lstdelone(t_list *lst, void (*del)(void *))
 {
-	int	i;
-
-	i = 0;
-	while (split && split[i])
+	if (lst && del)
 	{
-		free(split[i]);
-		++i;
+		del(lst->content);
+		free(lst);
+		lst = NULL;
 	}
-	free(split);
-	split = NULL;
 }

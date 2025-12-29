@@ -1,30 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_bonus.c                                       :+:      :+:    :+:   */
+/*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/10 08:07:51 by danfern3          #+#    #+#             */
-/*   Updated: 2025/11/10 08:07:52 by danfern3         ###   ########.fr       */
+/*   Created: 2025/10/10 09:34:56 by danfern3          #+#    #+#             */
+/*   Updated: 2025/10/21 10:59:30 by danfern3         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus.h"
+#ifndef FT_PRINTF_H
+# define FT_PRINTF_H
 
-/**
- * Frees the memory used by @param split
- */
-void	free_split(char **split)
-{
-	int	i;
+# include <unistd.h>
+# include <stdlib.h>
+# include <stdarg.h>
 
-	i = 0;
-	while (split && split[i])
-	{
-		free(split[i]);
-		++i;
-	}
-	free(split);
-	split = NULL;
-}
+int		ft_printf(char const *av, ...);
+int		ft_put_char(char c);
+int		ft_put_str(char *s);
+int		ft_put_hex(unsigned int n, char format);
+int		ft_put_ptr(unsigned long n);
+int		ft_put_int(int n);
+int		ft_put_uint(unsigned int n);
+int		ft_tolower(int c);
+char	ft_get_hex_value(int n);
+
+#endif

@@ -1,30 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_bonus.c                                       :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/10 08:07:51 by danfern3          #+#    #+#             */
-/*   Updated: 2025/11/10 08:07:52 by danfern3         ###   ########.fr       */
+/*   Created: 2025/10/03 07:46:07 by danfern3          #+#    #+#             */
+/*   Updated: 2025/10/16 19:25:33 by danfern3         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus.h"
+#include "ft_printf.h"
 
-/**
- * Frees the memory used by @param split
- */
-void	free_split(char **split)
+int	ft_put_int(int n)
 {
-	int	i;
+	long	nb;
+	int		printed;
 
-	i = 0;
-	while (split && split[i])
+	nb = n;
+	printed = 0;
+	if (nb < 0)
 	{
-		free(split[i]);
-		++i;
+		ft_put_char('-');
+		++printed;
+		nb = -nb;
 	}
-	free(split);
-	split = NULL;
+	if (nb >= 10)
+	{
+		printed += ft_put_int(nb / 10);
+		printed += ft_put_int(nb % 10);
+		return (printed);
+	}
+	return (ft_put_char(nb + '0') + printed);
 }
