@@ -22,14 +22,13 @@ NAME = pipex
 
 # * Compilation
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
-CFLAGS += -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror # -g -fsanitize=address
 
 # * Removal
 RM = rm -f
 
 # * Includes
-INCLUDES = -I ./inc/ -I ./inc/libft/inc/
+INCLUDES = -I inc/ -I inc/libft/inc/
 
 # * Objects dir
 OBJ_DIR = obj/
@@ -44,11 +43,11 @@ PIPEX_SRCS =	$(addprefix $(PIPEX_DIR), error.c) \
 SRCS = $(PIPEX_SRCS)
 
 # * Creating object files
-OBJS = $(patsubst $(PIPEX_SRCS)%.c, $(OBJ_DIR)%.o, $(SRCS))
+OBJS = $(patsubst $(PIPEX_DIR)%.c,$(OBJ_DIR)%.o,$(SRCS))
 
 # * LIBFT
-LIBFT_DIR = ./inc/libft/
-LIBFT = ./inc/libft/libft.a
+LIBFT_DIR = inc/libft/
+LIBFT = inc/libft/libft.a
 
 # ! RULES
 # ? Links a .c (and .h if needed) to its .o file
@@ -58,22 +57,16 @@ $(OBJ_DIR)%.o: $(PIPEX_DIR)%.c
 
 # ? main program compilation
 $(NAME): $(OBJS) $(LIBFT)
-	@clear
 	@$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LIBFT) -o $(NAME)
-	@echo "Compiling $(NAME)"
+	@echo "$(OK) $(GREEN)$(NAME)$(RESET)"
 
 # ? libft compilation
 $(LIBFT):
 	@$(MAKE) -C $(LIBFT_DIR) all $(NO_PRINT)
-	@echo "Compiling libft"
+	@echo "$(OK) $(GREEN)libft.a$(RESET)"
 
 # ? Compiles the whole program/library
 all: obj $(NAME)
-
-# bonus: bonus_obj $(BONUS_OBJS) $(LIBFT)
-# 	@clear
-# 	@$(CC) $(CFLAGS) $(INCLUDES) $(BONUS_OBJS) $(LIBFT) -o $(NAME)
-# 	@echo "Compiling bonus $(NAME)"
 
 obj:
 	@mkdir -p $(OBJ_DIR)
@@ -82,19 +75,18 @@ obj:
 clean:
 	@$(RM) $(OBJS) $(BONUS_OBJS)
 	@$(MAKE) -C $(LIBFT_DIR) clean $(NO_PRINT)
-	@echo "Removing .o files"
+	@echo "$(OK) $(RED)Removed object files$(RESET)"
 
 # ? Removes both object and executable files
 fclean: clean
 	@$(RM) $(NAME)
 	@$(MAKE) -C $(LIBFT_DIR) fclean $(NO_PRINT)
-	@echo "Removing $(NAME)"
+	@echo "$(OK) $(RED)Removed $(NAME)$(RESET)"
 
 # ? Rebuilds the program/library
 re: fclean all
-	@echo "Rebuilding $(LIBFT)"
 	@$(MAKE) -C $(LIBFT_DIR) re $(NO_PRINT)
-	@echo "Rebuilding $(NAME)"
+	@echo "$(OK) $(YELLOW)Rebuilt $(NAME)$(RESET)"
 
 # ! Automating / Debugging rules
 # INPUT = infile "ls -l" "grep Oct" "wc -l" outfile

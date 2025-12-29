@@ -1,4 +1,4 @@
-# * Colors
+# * Colors and utils
 GREEN = \033[0;32m
 YELLOW = \033[0;33m
 RED = \033[0;31m
@@ -107,7 +107,7 @@ OBJS = $(patsubst $(LIBFT_DIR)%.c, $(OBJ_DIR)%.o, $(SRCS))
 # ? Main program compilation
 $(NAME): $(OBJS)
 	@$(AR) $(NAME) $(OBJS)
-	@echo "$(OK) $(GREEN)$(NAME)$(RESET)"
+# 	@echo "$(OK) $(GREEN)$(NAME)$(RESET)"
 
 # Links a .c (and .h if needed) to its .o file
 # %.o: $(LIBFT_DIR)%.c
@@ -124,15 +124,15 @@ obj:
 # ? Removes the object files
 clean:
 	@$(RM) $(OBJS) $(BONUS_OBJS)
-	@echo "$(OK) $(RED)Removed object files$(RESET)"
+# 	@echo "$(OK) $(RED)Removed object files$(RESET)"
 
 # ? Removes both object and executable files
 fclean: clean
 	@$(RM) $(NAME)
-	@echo "$(OK) $(RED)Removed $(NAME)$(RESET)"
+# 	@echo "$(OK) $(RED)Removed $(NAME)$(RESET)"
 
 # ? Rebuilds the program/library
 re: fclean all
-	@echo "$(OK) $(YELLOW)Rebuilt $(NAME)$(RESET)"
+# 	@echo "$(OK) $(YELLOW)Rebuilt $(NAME)$(RESET)"
 
-.PHONY: all clean fclean re
+.PHONY: all obj clean fclean re
