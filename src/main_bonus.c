@@ -81,11 +81,9 @@ int	main(int ac, char **av, char **envp)
 	pipex.i = 2;
 	while (pipex.i < ac - 1)
 	{
-		if (pipex.i != ac - 2)
-		{
-			if (pipe(pipex.pipe_curr) < 0)
-				error();
-		}
+		if (pipex.i != ac - 2
+			&& pipe(pipex.pipe_curr) < 0)
+			error();
 		create_child(ac, av, envp, &pipex);
 		close_fds(pipex.pipe_prev);
 		if (pipex.i != ac - 2)
