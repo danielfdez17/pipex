@@ -40,6 +40,7 @@ PIPEX_SRCS =	$(addprefix $(PIPEX_DIR), error_bonus.c) \
 				$(addprefix $(PIPEX_DIR), free_bonus.c) \
 				$(addprefix $(PIPEX_DIR), main_bonus.c) \
 				$(addprefix $(PIPEX_DIR), pipes_bonus.c) \
+				$(addprefix $(PIPEX_DIR), pipex_struct_bonus.c) \
 				$(addprefix $(PIPEX_DIR), run_bonus.c)
 SRCS = $(PIPEX_SRCS)
 
@@ -86,6 +87,7 @@ fclean: clean
 	@echo "$(OK) $(RED)Removed $(NAME)$(RESET)"
 
 # ? Rebuilds the program/library
+re: rebonus
 rebonus: fclean all
 	@$(MAKE) -C $(LIBFT_DIR) re $(NO_PRINT)
 	@echo "$(OK) $(YELLOW)Rebuilt $(NAME)$(RESET)"

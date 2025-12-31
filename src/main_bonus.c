@@ -13,27 +13,6 @@
 #include "pipex_bonus.h"
 
 /**
- * Initializes the t_pipex structure
- */
-static t_pipex	init_pipex(int ac, char **av)
-{
-	t_pipex	pipex;
-
-	pipex.infile = open(av[1], O_RDONLY);
-	if (pipex.infile < 0)
-	{
-		perror(av[1]);
-		pipex.infile = open("/dev/null", O_RDONLY);
-	}
-	pipex.outfile = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (pipex.outfile < 0)
-		error();
-	init_pipe_ends(pipex.pipe_prev);
-	pipex.i = 2;
-	return (pipex);
-}
-
-/**
  * Function executed by the child process
  */
 static void	child_process(int ac, char **av, char **envp, t_pipex *pipex)
@@ -66,17 +45,17 @@ static void	create_child(int ac, char **av, char **envp, t_pipex *pipex)
 		child_process(ac, av, envp, pipex);
 }
 
-/**
- * Main function that creates a child processes
- * to execute the commands received in @param av
- */
-int	main(int ac, char **av, char **envp)
+int	here_doc_bonus(int ac, char **av, char **envp)
+{
+	(void)ac, (void)av, (void)envp;
+	return (0);
+}
+
+int	loop_bonus(int ac, char **av, char **envp)
 {
 	t_pipex	pipex;
 
-	if (ac < 5)
-		error();
-	pipex = init_pipex(ac, av);
+	init_pipex(ac, av, &pipex);
 	init_pipe_ends(pipex.pipe_prev);
 	pipex.i = 2;
 	while (pipex.i < ac - 1)
@@ -95,4 +74,14 @@ int	main(int ac, char **av, char **envp)
 	while (wait(NULL) > 0)
 		;
 	return (0);
+}
+
+int	main(int ac, char **av, char **envp)
+{
+	if (ft_equals(av[1], "here_doc") && ac == 6)
+		return (here_doc_bonus(ac, av, envp));
+	else if (ac >= 5)
+		return (loop_bonus(ac, av, envp));
+	ft_error("Error: Invalid number of arguments");
+	return (1);
 }

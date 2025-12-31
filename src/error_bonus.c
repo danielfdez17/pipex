@@ -15,10 +15,18 @@
 /**
  * Prints the error and terminates the program execution
  */
-void	error(void)
+bool	error(void)
 {
 	perror(NULL);
 	exit(EXIT_FAILURE);
+	return (false);
+}
+
+void	ft_error(char *msg)
+{
+	ft_putstr_fd(RED "pipex_bonus: ", STDERR_FILENO);
+	ft_putstr_fd(msg, STDERR_FILENO);
+	ft_putstr_fd(RESET "\n", STDERR_FILENO);
 }
 
 /**

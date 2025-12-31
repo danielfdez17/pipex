@@ -70,6 +70,7 @@ LIBFT_SRCS =	$(addprefix $(LIBFT_DIR), ft_atoi.c) \
 				$(addprefix $(LIBFT_DIR), ft_lstmap.c) \
 				$(addprefix $(LIBFT_DIR), ft_lstnew.c) \
 				$(addprefix $(LIBFT_DIR), ft_lstsize.c) \
+				$(addprefix $(LIBFT_DIR), ft_max.c) \
 				$(addprefix $(LIBFT_DIR), ft_printf.c) \
 				$(addprefix $(LIBFT_DIR), ft_put_char.c) \
 				$(addprefix $(LIBFT_DIR), ft_put_hex.c) \

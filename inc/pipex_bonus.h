@@ -20,7 +20,9 @@
 # include <string.h>
 # include <fcntl.h>
 # include <errno.h>
+# include <stdbool.h>
 # include "libft.h"
+# include "colors.h"
 
 typedef struct s_pipex
 {
@@ -33,7 +35,8 @@ typedef struct s_pipex
 }	t_pipex;
 
 // * ERROR HANDLERS
-void	error(void);
+bool	error(void);
+void	ft_error(char *msg);
 void	cmd_not_found(char **argv, char *path);
 
 // * FILES HANDLERS
@@ -59,5 +62,8 @@ char	*get_path(char *cmd, char **envp);
 void	run_command(char *cmd, char **envp);
 // ! NO
 // void	run_i_cmd(char **av, char **envp, int cmd);
+
+// * PIPEX STRUCT HANDLERS
+bool	init_pipex(int ac, char **av,t_pipex *pipex);
 
 #endif // PIPEX_BONUS_H
