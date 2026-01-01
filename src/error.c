@@ -17,7 +17,11 @@
  */
 void	error(void)
 {
-	perror(NULL);
+	perror("pipex: ");
+	if (errno == ENOENT)
+		exit(127);
+	if (errno == EACCES || errno == EISDIR || errno == ENOEXEC)
+		exit(126);
 	exit(EXIT_FAILURE);
 }
 
