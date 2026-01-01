@@ -48,6 +48,12 @@ static void	create_child(int ac, char **av, char **envp, t_pipex *pipex)
 int	here_doc_bonus(int ac, char **av, char **envp)
 {
 	(void)ac, (void)av, (void)envp;
+	// ? 1. Implement here_doc functionality
+	// ? 1.1 Use GNL to read from stdin until the limiter is found
+	// ? 1.2 Write the input to a temporary file
+	// ? 1.3 Use the temporary file as infile for the first command
+	// ? 1.4 Unlink the temporary file after use
+	// ? 2. Proceed with the rest of the pipex logic, reusing loop_bonus if possible and modifying outfile handling to append mode (just adding a flag to the corresponding open call)
 	return (0);
 }
 
