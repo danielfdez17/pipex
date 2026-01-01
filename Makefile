@@ -22,7 +22,7 @@ NAME = pipex
 
 # * Compilation
 CC = cc
-CFLAGS = -Wall -Wextra -Werror # -g3 -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g3
 
 # * Removal
 RM = rm -f
@@ -105,8 +105,12 @@ debug: all
 	clear
 	gdb ./$(NAME)
 
+noenv: all
+	clear
+	env -i ./$(NAME) infile "ls -l" "wc -l" outfile
+
 # Protects all rules from files with same name
-.PHONY: all obj clean fclean re run run2 valgrind debug
+.PHONY: all obj clean fclean re run run2 valgrind debug noenv
 
 # Indicates the main rule to be executed when only 'make' is called
 .GOAL: all

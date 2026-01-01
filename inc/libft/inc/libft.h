@@ -14,6 +14,7 @@
 # define LIBFT_H
 # include <stdlib.h>
 # include <unistd.h>
+# include <stdbool.h>
 # include "ft_printf.h"
 # include "get_next_line.h"
 

@@ -17,8 +17,6 @@
  */
 void	error(void)
 {
-	if (errno == 0)
-		return ;
 	perror(NULL);
 	exit(EXIT_FAILURE);
 }
@@ -29,7 +27,6 @@ void	error(void)
  */
 void	cmd_not_found(char **argv, char *path)
 {
-	perror(NULL);
 	if (path)
 		free(path);
 	path = NULL;
