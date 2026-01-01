@@ -34,6 +34,13 @@ typedef struct s_pipex
 	int		i;
 }	t_pipex;
 
+typedef struct s_here_doc
+{
+	char	*limiter;
+	char	**args;
+	int		size;
+}	t_here_doc;
+
 // * ERROR HANDLERS
 bool	error(void);
 void	ft_error(char *msg);
@@ -68,6 +75,7 @@ void	search_path(char **envp, int *i);
 bool	init_pipex(int ac, char **av,t_pipex *pipex);
 
 
-void	ft_readline(char *limiter);
+char	**ft_realloc(char **av, char *line, int size, bool free_line);
+void	ft_readline(t_here_doc *heredoc);
 
 #endif // PIPEX_BONUS_H

@@ -12,7 +12,7 @@
 
 #include "pipex_bonus.h"
 
-static char	**ft_realloc(char **av, char *line, int size)
+char	**ft_realloc(char **av, char *line, int size, bool free_line)
 {
 	char	**new_av;
 	int		i;
@@ -23,7 +23,7 @@ static char	**ft_realloc(char **av, char *line, int size)
 	i = -1;
 	while (av && av[++i])
 		new_av[i] = av[i];
-	if (av)
+	if (av && free_line)
 		free(av);
 	if (line)
 		new_av[size] = ft_strdup(line);
@@ -31,32 +31,25 @@ static char	**ft_realloc(char **av, char *line, int size)
 	return (new_av);
 }
 
-void	ft_readline(char *limiter)
+void	ft_readline(t_here_doc *heredoc)
 {
 	char	*line;
 	char	*tmp;
-	char	**argv;
-	int		size;
 
-	size = 0;
-	argv = NULL;
-	tmp = limiter;
-	limiter = ft_strjoin(limiter, "\n");
+	tmp = heredoc->limiter;
+	heredoc->limiter = ft_strjoin(heredoc->limiter, "\n");
 	ft_putstr_fd("> ", STDOUT_FILENO);
 	line = get_next_line(STDIN_FILENO, 0);
-	argv = ft_realloc(argv, line, size++);
 	while (line)
 	{
-		if (ft_equals(line, limiter))
+		if (ft_equals(line, heredoc->limiter))
 			break ;
-		argv = ft_realloc(argv, line, size++);
-		free(line);
+		heredoc->args = ft_realloc(heredoc->args, line, heredoc->size++, true);
 		ft_putstr_fd("> ", STDOUT_FILENO);
 		line = get_next_line(STDIN_FILENO, 0);
 	}
-	free(limiter);
-	limiter = tmp;
+	free(heredoc->limiter);
+	heredoc->limiter = tmp;
 	free(line);
-	free_split(argv);
 	get_next_line(STDIN_FILENO, 1);
 }
