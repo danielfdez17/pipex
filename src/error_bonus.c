@@ -17,9 +17,12 @@
  */
 bool	error(void)
 {
-	perror(NULL);
+	perror("pipex_bonus: ");
+	if (errno == ENOENT)
+		exit(127);
+	if (errno == EACCES || errno == EISDIR || errno == ENOEXEC)
+		exit(126);
 	exit(EXIT_FAILURE);
-	return (false);
 }
 
 void	ft_error(char *msg)
@@ -35,7 +38,6 @@ void	ft_error(char *msg)
  */
 void	cmd_not_found(char **argv, char *path)
 {
-	perror(NULL);
 	if (path)
 		free(path);
 	path = NULL;

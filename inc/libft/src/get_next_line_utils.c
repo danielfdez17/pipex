@@ -50,24 +50,6 @@ size_t	ft_strlen_gnl(const char *s)
 	return (i);
 }
 
-char	*ft_strdup(const char *s)
-{
-	size_t	i;
-	char	*dup;
-
-	i = 0;
-	dup = malloc(sizeof(char) * (ft_strlen_gnl(s) + 1));
-	if (!dup)
-		return (NULL);
-	while (s[i])
-	{
-		dup[i] = s[i];
-		++i;
-	}
-	dup[i] = '\0';
-	return (dup);
-}
-
 char	*ft_strchr_gnl(const char *s, int c)
 {
 	if (!s)

@@ -22,7 +22,7 @@ NAME = pipex
 
 # * Compilation
 CC = cc
-CFLAGS = -Wall -Wextra -Werror # -g3 -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror #-fsanitize=address -g3
 
 # * Removal
 RM = rm -f
@@ -41,6 +41,8 @@ PIPEX_SRCS =	$(addprefix $(PIPEX_DIR), error_bonus.c) \
 				$(addprefix $(PIPEX_DIR), main_bonus.c) \
 				$(addprefix $(PIPEX_DIR), pipes_bonus.c) \
 				$(addprefix $(PIPEX_DIR), pipex_struct_bonus.c) \
+				$(addprefix $(PIPEX_DIR), readline_bonus.c) \
+				$(addprefix $(PIPEX_DIR), run_utils_bonus.c) \
 				$(addprefix $(PIPEX_DIR), run_bonus.c)
 SRCS = $(PIPEX_SRCS)
 
@@ -93,24 +95,33 @@ rebonus: fclean all
 	@echo "$(OK) $(YELLOW)Rebuilt $(NAME)$(RESET)"
 
 # ! Automating / Debugging rules
+tests: all
+	clear
+	@echo "$(YELLOW)Running tests...$(RESET)\n"
+	@echo "$(YELLOW)Tracking file descriptors...$(RESET)"
+	valgrind --track-fds=yes -s ./$(NAME) infile "ls -l" "cat Makefile" "grep a" "wc -l" outfile1
+	valgrind --track-fds=yes -s ./$(NAME) infile "sleep 2" ls "cat Makefile" "grep src" outfile2
+	@echo "\n$(YELLOW)Basic functionality tests...$(RESET)"
+	./$(NAME) infile "ls -l" "cat Makefile" "grep a" "wc -l" outfile3
+	./$(NAME) infile "sleep 2" ls "cat Makefile" "grep src" outfile4
+	./$(NAME) here_doc BONUS "echo Hello World!" "wc -c" outfile5
+	@echo "\n$(YELLOW)Valgrind full leak check...$(RESET)"
+	valgrind --leak-check=full --track-origins=yes -s ./$(NAME) infile "ls -l" "cat Makefile" "grep a" "wc -l" outfile6
+
 run: all
 	clear
-	valgrind --track-fds=yes -s ./$(NAME) infile "ls -l" "cat Makefile" "grep a" "wc -l" outfile
-
-run2: all
-	clear
-	valgrind --track-fds=yes -s ./$(NAME) infile "sleep 2" ls "cat Makefile" "grep src" outfile
-
-valgrind: all
-	clear
-	valgrind --leak-check=full --track-origins=yes -s ./$(NAME) infile "ls -l" "cat Makefile" "grep a" "wc -l" outfile
+	./$(NAME) here_doc BONUS "ls -l" "wc -l" outfile
 
 debug: all
 	clear
-	gdb ./$(NAME)
+	gdb ./$(NAME) here_doc BONUS "ls -l" "wc -l" outfile
+
+noenv: all
+	clear
+	env -i ./$(NAME) infile "ls -l" "wc -l" outfile
 
 # Protects all rules from files with same name
-.PHONY: all obj clean fclean bonus rebonus run run2 valgrind debug
+.PHONY: all obj clean fclean bonus rebonus run run2 valgrind debug noenv
 
 # Indicates the main rule to be executed when only 'make' is called
 .GOAL: all

@@ -23,7 +23,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 
-char	*get_next_line(int fd);
+char	*get_next_line(int fd, int free_buff);
 char	*ft_strjoin_gnl(char *s1, char *s2);
 size_t	ft_strlen_gnl(const char *s);
 char	*ft_strchr_gnl(const char *s, int c);

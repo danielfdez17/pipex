@@ -82,11 +82,16 @@ static char	*ft_read_file(int fd, char *static_buff)
 	return (static_buff);
 }
 
-char	*get_next_line(int fd)
+char	*get_next_line(int fd, int free_buff)
 {
 	static char	*buffer;
 	char		*line;
 
+	if (free_buff)
+	{
+		free(buffer);
+		return (NULL);
+	}
 	if (fd < 0 || fd > MAX_FD || BUFFER_SIZE <= 0)
 		return (NULL);
 	buffer = ft_read_file(fd, buffer);

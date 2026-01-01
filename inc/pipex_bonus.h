@@ -60,10 +60,14 @@ char	*get_path(char *cmd, char **envp);
 // ! NO
 // int		run_last_cmd(int ac, char **av, int *fds, char **envp);
 void	run_command(char *cmd, char **envp);
+void	search_path(char **envp, int *i);
 // ! NO
 // void	run_i_cmd(char **av, char **envp, int cmd);
 
 // * PIPEX STRUCT HANDLERS
 bool	init_pipex(int ac, char **av,t_pipex *pipex);
+
+
+void	ft_readline(char *limiter);
 
 #endif // PIPEX_BONUS_H
