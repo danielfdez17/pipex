@@ -34,22 +34,19 @@ char	**ft_realloc(char **av, char *line, int size, bool free_line)
 void	ft_readline(t_here_doc *heredoc)
 {
 	char	*line;
-	char	*tmp;
 
-	tmp = heredoc->limiter;
-	heredoc->limiter = ft_strjoin(heredoc->limiter, "\n");
 	ft_putstr_fd("> ", STDOUT_FILENO);
 	line = get_next_line(STDIN_FILENO, 0);
 	while (line)
 	{
 		if (ft_equals(line, heredoc->limiter))
+		{
+			free(line);
 			break ;
+		}
 		heredoc->args = ft_realloc(heredoc->args, line, heredoc->size++, true);
 		ft_putstr_fd("> ", STDOUT_FILENO);
 		line = get_next_line(STDIN_FILENO, 0);
 	}
-	free(heredoc->limiter);
-	heredoc->limiter = tmp;
-	free(line);
 	get_next_line(STDIN_FILENO, 1);
 }

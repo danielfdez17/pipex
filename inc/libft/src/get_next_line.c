@@ -6,12 +6,11 @@
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 16:54:42 by danfern3          #+#    #+#             */
-/*   Updated: 2025/10/24 08:24:13 by danfern3         ###   ########.fr       */
+/*   Updated: 2025/10/29 15:35:57 by danfern3         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 static char	*clean_buffer(char *buffer)
 {
@@ -49,7 +48,7 @@ static char	*ft_till_endl(char *s)
 	while (s[new_size])
 	{
 		if (s[new_size] == '\n')
-			return (ft_substr_gnl(s, 0, new_size + 1));
+			return (ft_substr_gnl(s, 0, new_size));
 		++new_size;
 	}
 	return (ft_substr_gnl(s, 0, new_size));
@@ -82,12 +81,12 @@ static char	*ft_read_file(int fd, char *static_buff)
 	return (static_buff);
 }
 
-char	*get_next_line(int fd, int free_buff)
+char	*get_next_line(int fd, int free_static_buff)
 {
 	static char	*buffer;
 	char		*line;
 
-	if (free_buff)
+	if (free_static_buff == 1)
 	{
 		free(buffer);
 		return (NULL);
