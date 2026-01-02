@@ -26,7 +26,7 @@ char	**ft_realloc(char **av, char *line, int size, bool free_line)
 	if (av && free_line)
 		free(av);
 	if (line)
-		new_av[size] = ft_strdup(line);
+		new_av[size] = line;
 	new_av[size + 1] = NULL;
 	return (new_av);
 }
