@@ -38,6 +38,8 @@ PIPEX_DIR = src/
 PIPEX_SRCS =	$(addprefix $(PIPEX_DIR), error_bonus.c) \
 				$(addprefix $(PIPEX_DIR), files_bonus.c) \
 				$(addprefix $(PIPEX_DIR), free_bonus.c) \
+				$(addprefix $(PIPEX_DIR), heredoc_bonus.c) \
+				$(addprefix $(PIPEX_DIR), loop_bonus.c) \
 				$(addprefix $(PIPEX_DIR), main_bonus.c) \
 				$(addprefix $(PIPEX_DIR), pipes_bonus.c) \
 				$(addprefix $(PIPEX_DIR), pipex_struct_bonus.c) \
@@ -110,7 +112,7 @@ tests: all
 
 run: all
 	clear
-	./$(NAME) here_doc BONUS "ls -l" "wc -l" outfile
+	./$(NAME) here_doc BONUS "cat" "wc -l" outfile
 
 debug: all
 	clear

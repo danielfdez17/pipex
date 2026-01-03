@@ -76,34 +76,43 @@ void	run_command(char *cmd, char **envp)
 	free(path);
 }
 
+void	run_command_heredoc(char **argv, char **envp)
+{
+	char	*path;
+
+	if (ft_strchr(argv[0], '.'))
+		cmd_not_found(argv, NULL);
+	if (ft_strchr(argv[0], '/'))
+	{
+		path = ft_strdup(argv[0]);
+		if (execve(path, argv, envp) < 0)
+		{
+			free_split(argv);
+			free(path);
+			error();
+		}
+	}
+	path = get_path(argv[0], envp);
+	if (!path)
+		cmd_not_found(argv, path);
+	if (execve(path, argv, envp) < 0)
+	{
+		free_split(argv);
+		error();
+	}
+	free(path);
+}
+
 /**
  * Runs the first command reading the content of the infile file
  */
-int	run_first_cmd(char **av, int *fds, char **envp)
+int	run_first_cmd(char **heredoc_args, int *fds, char **envp)
 {
-	int	fd;
-
-	if (access(av[1], F_OK) != 0)
-	{
-		close_fds(fds);
-		error();
-	}
-	if (access(av[1], R_OK) != 0)
-	{
-		close_fds(fds);
-		error();
-	}
-	fd = open(av[1], O_RDONLY, 0644);
-	if (fd < 0)
-	{
-		close_fds(fds);
-		error();
-	}
-	ft_dup2(fd, STDIN_FILENO);
+	ft_dup2(fds[0], STDIN_FILENO);
 	ft_dup2(fds[1], STDOUT_FILENO);
 	close_fds(fds);
-	run_command(av[2], envp);
-	return (fd);
+	run_command_heredoc(heredoc_args, envp);
+	return (0);
 }
 
 /**
@@ -116,7 +125,7 @@ int	run_last_cmd(int ac, char **av, int *fds, char **envp)
 
 	if (errno != 0)
 		return (errno);
-	fd = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	fd = open(av[ac - 1], O_WRONLY | O_CREAT | O_APPEND, 0664);
 	if (fd < 0)
 		error();
 	ft_dup2(fds[0], STDIN_FILENO);

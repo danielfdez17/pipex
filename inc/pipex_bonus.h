@@ -24,7 +24,7 @@
 # include "libft.h"
 # include "colors.h"
 
-typedef struct s_pipex
+typedef struct s_data
 {
 	int		infile;
 	int		outfile;
@@ -32,7 +32,7 @@ typedef struct s_pipex
 	int		pipe_curr[2];
 	pid_t	pid;
 	int		i;
-}	t_pipex;
+}	t_data;
 
 typedef struct s_here_doc
 {
@@ -63,19 +63,22 @@ void	free_split(char **split);
 // * COMMANDS HANDLERS
 char	*get_path(char *cmd, char **envp);
 // ! NO
-// int		run_first_cmd(char **av, int *fds, char **envp);
+int		run_first_cmd(char **heredoc_args, int *fds, char **envp);
 // ! NO
-// int		run_last_cmd(int ac, char **av, int *fds, char **envp);
+int		run_last_cmd(int ac, char **av, int *fds, char **envp);
 void	run_command(char *cmd, char **envp);
 void	search_path(char **envp, int *i);
 // ! NO
 // void	run_i_cmd(char **av, char **envp, int cmd);
 
 // * PIPEX STRUCT HANDLERS
-bool	init_pipex(int ac, char **av,t_pipex *pipex);
-
+bool	init_pipex(int ac, char **av,t_data *pipex);
 
 char	**ft_realloc(char **av, char *line, int size, bool free_line);
 void	ft_readline(t_here_doc *heredoc);
+
+// * BONUS
+int	here_doc_bonus(int ac, char **av, char **envp);
+int	loop_bonus(int ac, char **av, char **envp);
 
 #endif // PIPEX_BONUS_H

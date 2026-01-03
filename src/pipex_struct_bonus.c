@@ -13,9 +13,9 @@
 #include "pipex_bonus.h"
 
 /**
- * Initializes the t_pipex structure
+ * Initializes the t_data structure
  */
-bool	init_pipex(int ac, char **av, t_pipex *pipex)
+bool	init_pipex(int ac, char **av, t_data *pipex)
 {
 	pipex->infile = open(av[1], O_RDONLY);
 	if (pipex->infile < 0)
