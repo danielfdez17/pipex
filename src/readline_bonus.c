@@ -34,7 +34,11 @@ char	**ft_realloc(char **av, char *line, int size, bool free_line)
 void	ft_readline(t_here_doc *heredoc)
 {
 	char	*line;
+	int		fd;
 
+	fd = open(".here_doc_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0664);
+	if (fd < 0)
+		error();
 	ft_putstr_fd("> ", STDOUT_FILENO);
 	line = get_next_line(STDIN_FILENO, 0);
 	while (line)
@@ -45,8 +49,10 @@ void	ft_readline(t_here_doc *heredoc)
 			break ;
 		}
 		heredoc->args = ft_realloc(heredoc->args, line, heredoc->size++, true);
+		ft_putendl_fd(line, fd);
 		ft_putstr_fd("> ", STDOUT_FILENO);
 		line = get_next_line(STDIN_FILENO, 0);
 	}
 	get_next_line(STDIN_FILENO, 1);
+	close(fd);
 }

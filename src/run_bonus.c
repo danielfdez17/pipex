@@ -106,12 +106,20 @@ void	run_command_heredoc(char **argv, char **envp)
 /**
  * Runs the first command reading the content of the infile file
  */
-int	run_first_cmd(char **heredoc_args, int *fds, char **envp)
+int	run_first_cmd(char **av, int *fds, char **envp)
 {
-	ft_dup2(fds[0], STDIN_FILENO);
+	int	fd;
+
+	fd = open(".here_doc_tmp", O_RDONLY, 0644);
+	if (fd < 0)
+	{
+		close_fds(fds);
+		error();
+	}
+	ft_dup2(fd, STDIN_FILENO);
 	ft_dup2(fds[1], STDOUT_FILENO);
 	close_fds(fds);
-	run_command_heredoc(heredoc_args, envp);
+	run_command(av[3], envp);
 	return (0);
 }
 

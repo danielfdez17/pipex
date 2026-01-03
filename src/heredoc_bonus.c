@@ -12,7 +12,7 @@
 
 #include "pipex_bonus.h"
 
-static void	main_heredoc(int ac, char **av, char **envp, t_here_doc *heredoc)
+static void	main_heredoc(int ac, char **av, char **envp)
 {
 	int		fds[2];
 	pid_t	pid1;
@@ -25,7 +25,7 @@ static void	main_heredoc(int ac, char **av, char **envp, t_here_doc *heredoc)
 	if (pid1 < 0)
 		error();
 	if (pid1 == 0)
-		run_first_cmd(heredoc->args, fds, envp);
+		run_first_cmd(av, fds, envp);
 	pid2 = fork();
 	if (pid2 < 0)
 		error();
@@ -50,7 +50,7 @@ int	here_doc_bonus(int ac, char **av, char **envp)
 	ft_readline(&heredoc);
 	// for (int i = 0; heredoc.args[i]; i++)
 	// 	printf("heredoc_args[%d]: %s\n", i, heredoc.args[i]);
-	main_heredoc(ac, av, envp, &heredoc);
+	main_heredoc(ac, av, envp);
 	free_split(heredoc.args);
 	return (0);
 }
