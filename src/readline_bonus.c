@@ -12,26 +12,7 @@
 
 #include "pipex_bonus.h"
 
-char	**ft_realloc(char **av, char *line, int size, bool free_line)
-{
-	char	**new_av;
-	int		i;
-
-	new_av = malloc(sizeof(char *) * (size + 2));
-	if (!new_av)
-		return (NULL);
-	i = -1;
-	while (av && av[++i])
-		new_av[i] = av[i];
-	if (av && free_line)
-		free(av);
-	if (line)
-		new_av[size] = line;
-	new_av[size + 1] = NULL;
-	return (new_av);
-}
-
-void	ft_readline(t_here_doc *heredoc)
+void	ft_readline(char *limiter)
 {
 	char	*line;
 	int		fd;
@@ -43,14 +24,14 @@ void	ft_readline(t_here_doc *heredoc)
 	line = get_next_line(STDIN_FILENO, 0);
 	while (line)
 	{
-		if (ft_equals(line, heredoc->limiter))
+		if (ft_equals(line, limiter))
 		{
 			free(line);
 			break ;
 		}
-		heredoc->args = ft_realloc(heredoc->args, line, heredoc->size++, true);
 		ft_putendl_fd(line, fd);
 		ft_putstr_fd("> ", STDOUT_FILENO);
+		free(line);
 		line = get_next_line(STDIN_FILENO, 0);
 	}
 	get_next_line(STDIN_FILENO, 1);

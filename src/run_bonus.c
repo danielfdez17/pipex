@@ -76,33 +76,6 @@ void	run_command(char *cmd, char **envp)
 	free(path);
 }
 
-void	run_command_heredoc(char **argv, char **envp)
-{
-	char	*path;
-
-	if (ft_strchr(argv[0], '.'))
-		cmd_not_found(argv, NULL);
-	if (ft_strchr(argv[0], '/'))
-	{
-		path = ft_strdup(argv[0]);
-		if (execve(path, argv, envp) < 0)
-		{
-			free_split(argv);
-			free(path);
-			error();
-		}
-	}
-	path = get_path(argv[0], envp);
-	if (!path)
-		cmd_not_found(argv, path);
-	if (execve(path, argv, envp) < 0)
-	{
-		free_split(argv);
-		error();
-	}
-	free(path);
-}
-
 /**
  * Runs the first command reading the content of the infile file
  */

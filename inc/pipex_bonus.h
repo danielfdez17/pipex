@@ -72,13 +72,13 @@ void	search_path(char **envp, int *i);
 // void	run_i_cmd(char **av, char **envp, int cmd);
 
 // * PIPEX STRUCT HANDLERS
-bool	init_pipex(int ac, char **av,t_data *pipex);
+bool	init_pipex(int ac, char **av, t_data *pipex);
 
-char	**ft_realloc(char **av, char *line, int size, bool free_line);
-void	ft_readline(t_here_doc *heredoc);
+// char	**ft_realloc(char **av, char *line, int size, bool free_line);
+void	ft_readline(char *limiter);
 
 // * BONUS
-int	here_doc_bonus(int ac, char **av, char **envp);
-int	loop_bonus(int ac, char **av, char **envp);
+int		here_doc_bonus(int ac, char **av, char **envp);
+int		loop_bonus(int ac, char **av, char **envp);
 
 #endif // PIPEX_BONUS_H

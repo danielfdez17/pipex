@@ -69,7 +69,7 @@ void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 
 // * Extra functions
-bool ft_equals(const char *s1, const char *s2);
-int	ft_max(int a, int b);
+bool	ft_equals(const char *s1, const char *s2);
+int		ft_max(int a, int b);
 
 #endif

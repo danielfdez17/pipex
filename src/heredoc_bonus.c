@@ -40,17 +40,7 @@ static void	main_heredoc(int ac, char **av, char **envp)
 
 int	here_doc_bonus(int ac, char **av, char **envp)
 {
-	(void)ac, (void)av, (void)envp;
-	t_here_doc	heredoc;
-	heredoc.limiter = av[2];
-	heredoc.args = ft_split(av[3], ' ');
-	heredoc.size = -1;
-	while (heredoc.args[++heredoc.size])
-		;
-	ft_readline(&heredoc);
-	// for (int i = 0; heredoc.args[i]; i++)
-	// 	printf("heredoc_args[%d]: %s\n", i, heredoc.args[i]);
+	ft_readline(av[2]);
 	main_heredoc(ac, av, envp);
-	free_split(heredoc.args);
 	return (0);
 }
