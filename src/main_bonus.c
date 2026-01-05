@@ -6,7 +6,7 @@
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 08:07:54 by danfern3          #+#    #+#             */
-/*   Updated: 2025/11/10 12:38:25 by danfern3         ###   ########.fr       */
+/*   Updated: 2026/01/05 08:16:24 by danfern3         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	main(int ac, char **av, char **envp)
 {
-	if (ft_equals(av[1], "here_doc") && ac == 6)
+	if (ac == 6 && ft_equals(av[1], "here_doc"))
 		return (here_doc_bonus(ac, av, envp));
 	else if (ac >= 5)
 		return (loop_bonus(ac, av, envp));

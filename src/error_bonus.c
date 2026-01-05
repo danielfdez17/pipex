@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   error_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 08:06:31 by danfern3          #+#    #+#             */
-/*   Updated: 2025/11/10 12:25:36 by danfern3         ###   ########.fr       */
+/*   Updated: 2026/01/05 08:24:17 by danfern3         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,13 @@
  */
 bool	error(void)
 {
-	perror("pipex_bonus: ");
+	if (errno != 0)
+		perror("pipex_bonus: ");
 	if (errno == ENOENT)
 		exit(127);
 	if (errno == EACCES || errno == EISDIR || errno == ENOEXEC)
 		exit(126);
-	exit(EXIT_FAILURE);
+	exit(errno);
 }
 
 void	ft_error(char *msg)
@@ -43,5 +44,5 @@ void	cmd_not_found(char **argv, char *path)
 	path = NULL;
 	if (argv)
 		free_split(argv);
-	exit(errno);
+	error();
 }

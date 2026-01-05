@@ -53,9 +53,9 @@ void	run_command(char *cmd, char **envp)
 	char	*path;
 
 	argv = ft_split(cmd, ' ');
-	if (ft_strchr(argv[0], '.'))
+	if (!argv || !argv[0] || ft_strchr(argv[0], '.'))
 		cmd_not_found(argv, NULL);
-	if (ft_strchr(argv[0], '/'))
+	if (!argv || !argv[0] || ft_strchr(argv[0], '/'))
 	{
 		path = ft_strdup(argv[0]);
 		if (execve(path, argv, envp) < 0)
