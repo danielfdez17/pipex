@@ -6,7 +6,7 @@
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 08:07:54 by danfern3          #+#    #+#             */
-/*   Updated: 2025/11/10 12:38:25 by danfern3         ###   ########.fr       */
+/*   Updated: 2026/01/05 08:32:32 by danfern3         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,5 +42,6 @@ int	here_doc_bonus(int ac, char **av, char **envp)
 {
 	ft_readline(av[2]);
 	main_heredoc(ac, av, envp);
+	unlink(".here_doc_tmp");
 	return (0);
 }
