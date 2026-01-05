@@ -6,7 +6,7 @@
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 08:08:09 by danfern3          #+#    #+#             */
-/*   Updated: 2025/11/14 15:55:17 by danfern3         ###   ########.fr       */
+/*   Updated: 2026/01/05 08:12:56 by danfern3         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,9 @@ void	run_command(char *cmd, char **envp)
 		cmd_not_found(argv, NULL);
 	if (ft_strchr(argv[0], '/'))
 	{
-		path = ft_strdup(argv[0]);
-		if (execve(path, argv, envp) < 0)
+		if (execve(argv[0], argv, envp) < 0)
 		{
 			free_split(argv);
-			free(path);
 			error();
 		}
 	}

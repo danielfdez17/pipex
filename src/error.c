@@ -6,7 +6,7 @@
 /*   By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 08:06:31 by danfern3          #+#    #+#             */
-/*   Updated: 2025/11/14 15:32:45 by danfern3         ###   ########.fr       */
+/*   Updated: 2026/01/05 08:10:15 by danfern3         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 void	error(void)
 {
 	perror("pipex: ");
+	printf("testing\n");
 	if (errno == ENOENT)
 		exit(127);
 	if (errno == EACCES || errno == EISDIR || errno == ENOEXEC)
@@ -36,5 +37,5 @@ void	cmd_not_found(char **argv, char *path)
 	path = NULL;
 	if (argv)
 		free_split(argv);
-	exit(errno);
+	error();
 }
