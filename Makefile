@@ -6,10 +6,10 @@
 #    By: danfern3 <danfern3@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/10 09:34:42 by danfern3          #+#    #+#              #
-#    Updated: 2025/11/14 15:18:18 by danfern3         ###   ########.fr        #
+#    Updated: 2026/01/05 08:18:53 by danfern3         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-# * Colors and utils
+
 GREEN = \033[0;32m
 YELLOW = \033[0;33m
 RED = \033[0;31m
@@ -22,7 +22,7 @@ NAME = pipex
 
 # * Compilation
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3 #-fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
 
 # * Removal
 RM = rm -f
